@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
+	License : As long as you retain this notice you can do whatever you want 
+	with this stuff. If we meet some day, and you think this stuff is worth it, 
+	you can buy me a beer in return -->
+<resources>
+    <string name="app_name">GTD Browser</string>
+    
+    <!--  Dialog texts -->
+    <string name="dialog_error_connexion_error_title">Connexion error</string>
+    <string name="dialog_error_connexion_error_message">A connexion error occured. Please verify that you are connected to an Edge, 3G or Wifi network.</string>  
+    <string name="dialog_error_data_error_title">Incorrect data</string>
+    <string name="dialog_error_data_error_message">Received data are invalid.</string>
+    <string name="dialog_button_retry">Retry</string>
+
+    <!-- HomeActivity texts -->
+    <string name="home_b_region_list">Browse by Region</string>
+    <string name="home_b_attack_list">Browse All Attacks</string>
+
+    <!-- RegionListActivity texts -->
+    <string name="region_list_title">GTD Browser > Regions</string>
+    <string name="region_list_sp_return_format_prompt">Webservice return format</string>
+    <string name="region_list_b_load">Load</string>
+    <string name="region_list_b_clear_db">Clear DB</string>
+    <string name="region_list_tv_empty">0 regions found</string>
+    
+    <string name="attack_list_title">GTD Browser > Attacks</string>
+    <string name="attack_list_tv_empty">0 attacks found</string>
+</resources>
