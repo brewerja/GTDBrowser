@@ -44,7 +44,7 @@ public class GtdService extends WorkerService {
 	public static final int WORKER_TYPE_REGION_LIST = 0;
 	public static final int WORKER_TYPE_ATTACK_LIST = 1;
 
-	public static String INTENT_EXTRA_QUERY_OFFSET = "com.gtdbrowser.extras.query_offset";
+	public static String INTENT_EXTRA_URI = "com.gtdbrowser.extras.uri";
 
 	public GtdService() {
 		super(MAX_THREADS);
@@ -58,8 +58,8 @@ public class GtdService extends WorkerService {
 		try {
 			switch (workerType) {
 			case WORKER_TYPE_REGION_LIST:
-				int offset = intent.getIntExtra(INTENT_EXTRA_QUERY_OFFSET, 0);
-				Bundle resultBundle = RegionListWorker.start(this, offset);
+				String uri = intent.getStringExtra(INTENT_EXTRA_URI);
+				Bundle resultBundle = RegionListWorker.start(this, uri);
 				sendSuccess(intent, resultBundle);
 				break;
 			case WORKER_TYPE_ATTACK_LIST:

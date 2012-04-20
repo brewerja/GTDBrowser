@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,9 +33,12 @@ import com.gtdbrowser.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 public class RegionListActivity extends ListActivity implements OnRequestFinishedListener, AsyncQueryListener,
 		OnClickListener, OnScrollListener {
 
+	public static final String PREFS_NAME = "RegionListActivityPrefs";
+
 	private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
 	private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
 	private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
+	private static final String SAVED_STATE_URI = "savedStateUri";
 
 	private Button mButtonLoad;
 	private Button mButtonClearDb;
@@ -42,7 +46,7 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 	private GtdRequestManager mRequestManager;
 	private int mRequestId = -1;
 	private int priorFirst = -1;
-	private int listOffset = 0;
+	private String uri = WSConfig.WS_REGION_LIST_URL;
 
 	private NotifyingAsyncQueryHandler mQueryHandler;
 
@@ -56,6 +60,9 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		uri = settings.getString("uri", WSConfig.WS_REGION_LIST_URL);
+
 		setContentView(R.layout.region_list);
 		bindViews();
 
@@ -63,6 +70,7 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 			mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);
 			mErrorDialogTitle = savedInstanceState.getString(SAVED_STATE_ERROR_TITLE);
 			mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
+			uri = savedInstanceState.getString(SAVED_STATE_URI);
 		}
 
 		mRequestManager = GtdRequestManager.from(this);
@@ -108,11 +116,11 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
-		super.onSaveInstanceState(outState);
-
 		outState.putInt(SAVED_STATE_REQUEST_ID, mRequestId);
 		outState.putString(SAVED_STATE_ERROR_TITLE, mErrorDialogTitle);
 		outState.putString(SAVED_STATE_ERROR_MESSAGE, mErrorDialogMessage);
+		outState.putString(SAVED_STATE_URI, uri);
+		super.onSaveInstanceState(outState);
 	}
 
 	private void bindViews() {
@@ -167,9 +175,11 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 	}
 
 	private void callRegionListWS() {
-		setProgressBarIndeterminateVisibility(true);
-		mRequestManager.addOnRequestFinishedListener(this);
-		mRequestId = mRequestManager.getRegionList(listOffset);
+		if (uri != null) {
+			setProgressBarIndeterminateVisibility(true);
+			mRequestManager.addOnRequestFinishedListener(this);
+			mRequestId = mRequestManager.getObjectList(uri);
+		}
 	}
 
 	@Override
@@ -177,8 +187,12 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 		if (view == mButtonLoad) {
 			callRegionListWS();
 		} else if (view == mButtonClearDb) {
-			listOffset = 0;
 			priorFirst = -1;
+			uri = WSConfig.WS_REGION_LIST_URL;
+			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putString("uri", uri);
+			editor.commit();
 			mQueryHandler.startDelete(RegionDao.CONTENT_URI);
 		}
 	}
@@ -203,8 +217,14 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 					showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
 				}
 			}
-			if (!payload.getBoolean("hasNext"))
-				listOffset = -1;
+			if (payload.getString("nextURI") != null) {
+				uri = payload.getString("nextURI");
+				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putString("uri", uri);
+				editor.commit();
+			} else
+				uri = null;
 			// Nothing else to do if it works as the cursor is automatically
 			// updated
 		}
@@ -263,19 +283,12 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 		if (visibleItemCount < totalItemCount && (firstVisibleItem + visibleItemCount >= totalItemCount - 5)) {
 			if (firstVisibleItem != priorFirst) {
 				priorFirst = firstVisibleItem;
-				onLastListItemDisplayed(totalItemCount, visibleItemCount);
+				callRegionListWS();
 			}
 		}
 	}
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-	}
-
-	protected void onLastListItemDisplayed(int totalItemCount, int visibleItemCount) {
-		if (listOffset != -1) {
-			listOffset += WSConfig.INCREMENT;
-			callRegionListWS();
-		}
 	}
 }

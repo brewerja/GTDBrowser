@@ -168,10 +168,11 @@ public class GtdRequestManager extends RequestManager {
 
 	/**
 	 * Gets the list of regions and save it in the database
+	 * @param uri 
 	 * 
 	 * @return the request Id
 	 */
-	public int getRegionList(int offset) {
+	public int getObjectList(String uri) {
 
 		// Check if a match to this request is already launched
 		final int requestSparseArrayLength = mRequestSparseArray.size();
@@ -190,7 +191,7 @@ public class GtdRequestManager extends RequestManager {
 		intent.putExtra(GtdService.INTENT_EXTRA_WORKER_TYPE, GtdService.WORKER_TYPE_REGION_LIST);
 		intent.putExtra(GtdService.INTENT_EXTRA_RECEIVER, mEvalReceiver);
 		intent.putExtra(GtdService.INTENT_EXTRA_REQUEST_ID, requestId);
-		intent.putExtra(GtdService.INTENT_EXTRA_QUERY_OFFSET, offset);
+		intent.putExtra(GtdService.INTENT_EXTRA_URI, uri);
 		mContext.startService(intent);
 
 		mRequestSparseArray.append(requestId, intent);

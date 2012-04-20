@@ -24,19 +24,20 @@ import com.gtdbrowser.data.provider.GtdContent.RegionDao;
 
 public class RegionListWorker {
 
-	private static boolean hasNext;
-	
-	public static Bundle start(final Context context, final int offset) throws IllegalStateException, IOException,
+	private static String next_uri;
+
+	public static Bundle start(final Context context, final String uri) throws IllegalStateException, IOException,
 			URISyntaxException, RestClientException, ParserConfigurationException, SAXException, JSONException {
 
-		NetworkConnectionResult wsResult = NetworkConnection.retrieveResponseFromService(
-				WSConfig.WS_REGION_LIST_URL + "&offset=" + offset, NetworkConnection.METHOD_GET);
+		NetworkConnectionResult wsResult = NetworkConnection.retrieveResponseFromService(uri,
+				NetworkConnection.METHOD_GET);
 
 		ArrayList<Region> regionList = null;
 		regionList = parseResult(wsResult.wsResponse);
 
 		// Clear the table
-		// context.getContentResolver().delete(RegionDao.CONTENT_URI, "1", null);
+		// context.getContentResolver().delete(RegionDao.CONTENT_URI, "1",
+		// null);
 		// "1" means all rows, was null
 
 		// Adds the regions in the database
@@ -48,24 +49,24 @@ public class RegionListWorker {
 			}
 			context.getContentResolver().bulkInsert(RegionDao.CONTENT_URI, valuesArray);
 		}
-		
+
 		Bundle returnBundle = new Bundle();
-		returnBundle.putBoolean("hasNext", hasNext);
+		returnBundle.putString("nextURI", next_uri);
 		return returnBundle;
 	}
-	
+
 	public static ArrayList<Region> parseResult(final String wsResponse) throws JSONException {
 		final ArrayList<Region> regionList = new ArrayList<Region>();
 
 		final JSONObject parser = new JSONObject(wsResponse);
-		
+
 		final JSONObject jsonMetaArray = parser.getJSONObject("meta");
 		if (jsonMetaArray.get("next") != JSONObject.NULL) {
-			hasNext = true;
+			next_uri = WSConfig.SERVER_URI + jsonMetaArray.getString("next");
 		} else {
-			hasNext = false;
+			next_uri = null;
 		}
-		
+
 		final JSONArray jsonRegionArray = parser.getJSONArray("objects");
 		final int size = jsonRegionArray.length();
 		for (int i = 0; i < size; i++) {
