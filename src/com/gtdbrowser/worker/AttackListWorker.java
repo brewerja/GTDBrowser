@@ -26,7 +26,7 @@ public class AttackListWorker {
 			URISyntaxException, RestClientException, ParserConfigurationException, SAXException, JSONException {
 
 		NetworkConnectionResult wsResult = NetworkConnection.retrieveResponseFromService(
-				WSConfig.WS_ATTACK_LIST_URL_JSON, NetworkConnection.METHOD_GET);
+				WSConfig.WS_ATTACK_LIST_URL, NetworkConnection.METHOD_GET);
 
 		ArrayList<Attack> AttackList = null;
 		AttackList = AttackListJsonFactory.parseResult(wsResult.wsResponse);

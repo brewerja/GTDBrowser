@@ -13,12 +13,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.gtdbrowser.R;
 import com.gtdbrowser.config.DialogConfig;
+import com.gtdbrowser.config.WSConfig;
 import com.gtdbrowser.data.provider.GtdContent.RegionDao;
 import com.gtdbrowser.data.requestmanager.GtdRequestManager;
 import com.gtdbrowser.data.requestmanager.GtdRequestManager.OnRequestFinishedListener;
@@ -27,7 +30,7 @@ import com.gtdbrowser.util.NotifyingAsyncQueryHandler;
 import com.gtdbrowser.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 
 public class RegionListActivity extends ListActivity implements OnRequestFinishedListener, AsyncQueryListener,
-		OnClickListener {
+		OnClickListener, OnScrollListener {
 
 	private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
 	private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
@@ -38,6 +41,8 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 
 	private GtdRequestManager mRequestManager;
 	private int mRequestId = -1;
+	private int priorFirst = -1;
+	private int listOffset = 0;
 
 	private NotifyingAsyncQueryHandler mQueryHandler;
 
@@ -116,6 +121,8 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 
 		mButtonClearDb = (Button) findViewById(R.id.b_clear_db);
 		mButtonClearDb.setOnClickListener(this);
+
+		getListView().setOnScrollListener(this);
 	}
 
 	@Override
@@ -162,7 +169,7 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 	private void callRegionListWS() {
 		setProgressBarIndeterminateVisibility(true);
 		mRequestManager.addOnRequestFinishedListener(this);
-		mRequestId = mRequestManager.getRegionList();
+		mRequestId = mRequestManager.getRegionList(listOffset);
 	}
 
 	@Override
@@ -170,6 +177,8 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 		if (view == mButtonLoad) {
 			callRegionListWS();
 		} else if (view == mButtonClearDb) {
+			listOffset = 0;
+			priorFirst = -1;
 			mQueryHandler.startDelete(RegionDao.CONTENT_URI);
 		}
 	}
@@ -194,7 +203,10 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 					showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
 				}
 			}
-			// Nothing to do if it works as the cursor is automatically updated
+			if (!payload.getBoolean("hasNext"))
+				listOffset = -1;
+			// Nothing else to do if it works as the cursor is automatically
+			// updated
 		}
 	}
 
@@ -243,6 +255,27 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 			View view = mInflater.inflate(R.layout.region_list_item, null);
 			view.setTag(new ViewHolder(view));
 			return view;
+		}
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+		if (visibleItemCount < totalItemCount && (firstVisibleItem + visibleItemCount >= totalItemCount - 5)) {
+			if (firstVisibleItem != priorFirst) {
+				priorFirst = firstVisibleItem;
+				onLastListItemDisplayed(totalItemCount, visibleItemCount);
+			}
+		}
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+	}
+
+	protected void onLastListItemDisplayed(int totalItemCount, int visibleItemCount) {
+		if (listOffset != -1) {
+			listOffset += WSConfig.INCREMENT;
+			callRegionListWS();
 		}
 	}
 }

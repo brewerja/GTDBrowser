@@ -9,6 +9,10 @@
 package com.gtdbrowser.config;
 
 public class WSConfig {
-	public static final String WS_REGION_LIST_URL_JSON = "http://23.21.214.235/api/v1/regions/";
-	public static final String WS_ATTACK_LIST_URL_JSON = "http://23.21.214.235/api/v1/attacks/";
+	public static final int INCREMENT = 40;
+	public static final String WS_COUNTRY_LIST_URL = "http://23.21.214.235/api/v1/countries/?order_by=-num_attacks&limit="
+			+ INCREMENT;
+	public static final String WS_REGION_LIST_URL = "http://23.21.214.235/api/v1/regions/?order_by=-num_attacks&limit="
+			+ INCREMENT;
+	public static final String WS_ATTACK_LIST_URL = "http://23.21.214.235/api/v1/attacks/";
 }

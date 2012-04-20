@@ -6,7 +6,7 @@
 <resources>
 	<string-array
 		name="return_format">
-		<item>XML</item>
-		<item>JSON</item>
+		<item>Country</item>
+		<item>Region</item>
 	</string-array>
 </resources>

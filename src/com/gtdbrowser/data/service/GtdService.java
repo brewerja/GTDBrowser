@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -43,6 +44,8 @@ public class GtdService extends WorkerService {
 	public static final int WORKER_TYPE_REGION_LIST = 0;
 	public static final int WORKER_TYPE_ATTACK_LIST = 1;
 
+	public static String INTENT_EXTRA_QUERY_OFFSET = "com.gtdbrowser.extras.query_offset";
+
 	public GtdService() {
 		super(MAX_THREADS);
 	}
@@ -55,8 +58,9 @@ public class GtdService extends WorkerService {
 		try {
 			switch (workerType) {
 			case WORKER_TYPE_REGION_LIST:
-				RegionListWorker.start(this, 1);
-				sendSuccess(intent, null);
+				int offset = intent.getIntExtra(INTENT_EXTRA_QUERY_OFFSET, 0);
+				Bundle resultBundle = RegionListWorker.start(this, offset);
+				sendSuccess(intent, resultBundle);
 				break;
 			case WORKER_TYPE_ATTACK_LIST:
 				AttackListWorker.start(this, 1);
