@@ -24,7 +24,7 @@ import com.foxykeep.datadroid.exception.RestClientException;
 import com.foxykeep.datadroid.service.WorkerService;
 import com.gtdbrowser.data.requestmanager.GtdRequestManager;
 import com.gtdbrowser.worker.AttackListWorker;
-import com.gtdbrowser.worker.RegionListWorker;
+import com.gtdbrowser.worker.FilteredListWorker;
 
 /**
  * This class is called by the {@link GtdRequestManager} through the
@@ -41,7 +41,7 @@ public class GtdService extends WorkerService {
 	private static final int MAX_THREADS = 3;
 
 	// Worker types
-	public static final int WORKER_TYPE_REGION_LIST = 0;
+	public static final int WORKER_TYPE_FILTERED_LIST = 0;
 	public static final int WORKER_TYPE_ATTACK_LIST = 1;
 
 	public static String INTENT_EXTRA_URI = "com.gtdbrowser.extras.uri";
@@ -53,13 +53,12 @@ public class GtdService extends WorkerService {
 	@Override
 	protected void onHandleIntent(final Intent intent) {
 		final int workerType = intent.getIntExtra(INTENT_EXTRA_WORKER_TYPE, -1);
-
-		// Don't need to switch on workerType...
+		
 		try {
 			switch (workerType) {
-			case WORKER_TYPE_REGION_LIST:
+			case WORKER_TYPE_FILTERED_LIST:
 				String uri = intent.getStringExtra(INTENT_EXTRA_URI);
-				Bundle resultBundle = RegionListWorker.start(this, uri);
+				Bundle resultBundle = FilteredListWorker.start(this, uri);
 				sendSuccess(intent, resultBundle);
 				break;
 			case WORKER_TYPE_ATTACK_LIST:

@@ -167,7 +167,7 @@ public class GtdRequestManager extends RequestManager {
 	}
 
 	/**
-	 * Gets the list of regions and save it in the database
+	 * Gets the list of objects and save it in the database
 	 * @param uri 
 	 * 
 	 * @return the request Id
@@ -179,7 +179,7 @@ public class GtdRequestManager extends RequestManager {
 		for (int i = 0; i < requestSparseArrayLength; i++) {
 			final Intent savedIntent = mRequestSparseArray.valueAt(i);
 
-			if (savedIntent.getIntExtra(GtdService.INTENT_EXTRA_WORKER_TYPE, -1) != GtdService.WORKER_TYPE_REGION_LIST) {
+			if (savedIntent.getIntExtra(GtdService.INTENT_EXTRA_WORKER_TYPE, -1) != GtdService.WORKER_TYPE_FILTERED_LIST) {
 				continue;
 			}
 			return mRequestSparseArray.keyAt(i);
@@ -188,7 +188,7 @@ public class GtdRequestManager extends RequestManager {
 		final int requestId = sRandom.nextInt(MAX_RANDOM_REQUEST_ID);
 
 		final Intent intent = new Intent(mContext, GtdService.class);
-		intent.putExtra(GtdService.INTENT_EXTRA_WORKER_TYPE, GtdService.WORKER_TYPE_REGION_LIST);
+		intent.putExtra(GtdService.INTENT_EXTRA_WORKER_TYPE, GtdService.WORKER_TYPE_FILTERED_LIST);
 		intent.putExtra(GtdService.INTENT_EXTRA_RECEIVER, mEvalReceiver);
 		intent.putExtra(GtdService.INTENT_EXTRA_REQUEST_ID, requestId);
 		intent.putExtra(GtdService.INTENT_EXTRA_URI, uri);
@@ -200,7 +200,7 @@ public class GtdRequestManager extends RequestManager {
 	}
 
 	/**
-	 * Gets the list of regions and save it in the database
+	 * Gets the list of attacks and save it in the database
 	 * 
 	 * @return the request Id
 	 */

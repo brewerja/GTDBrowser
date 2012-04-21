@@ -23,7 +23,7 @@ import android.util.Log;
 
 import com.gtdbrowser.config.LogConfig;
 import com.gtdbrowser.data.provider.GtdContent.AttackDao;
-import com.gtdbrowser.data.provider.GtdContent.RegionDao;
+import com.gtdbrowser.data.provider.FilteredListDao;
 
 public class GtdProvider extends ContentProvider {
 
@@ -43,7 +43,11 @@ public class GtdProvider extends ContentProvider {
 	private static final int REGION = REGION_BASE;
 	private static final int REGION_ID = REGION_BASE + 1;
 
-	private static final int ATTACK_BASE = 0x1000;
+	private static final int COUNTRY_BASE = 0x1000;
+	private static final int COUNTRY = COUNTRY_BASE;
+	private static final int COUNTRY_ID = COUNTRY_BASE + 1;
+
+	private static final int ATTACK_BASE = 0x2000;
 	private static final int ATTACK = ATTACK_BASE;
 	private static final int ATTACK_ID = ATTACK_BASE + 1;
 
@@ -55,7 +59,7 @@ public class GtdProvider extends ContentProvider {
 	// base type: 0,
 	// 0x1000, 0x2000, etc.
 
-	private static final String[] TABLE_NAMES = { RegionDao.TABLE_NAME, AttackDao.TABLE_NAME };
+	private static final String[] TABLE_NAMES = { "region", "country", AttackDao.TABLE_NAME };
 
 	private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -63,9 +67,13 @@ public class GtdProvider extends ContentProvider {
 		final UriMatcher matcher = sURIMatcher;
 
 		// All regions
-		matcher.addURI(AUTHORITY, RegionDao.TABLE_NAME, REGION);
+		matcher.addURI(AUTHORITY, "region", REGION);
 		// A specific region
-		matcher.addURI(AUTHORITY, RegionDao.TABLE_NAME + "/#", REGION_ID);
+		matcher.addURI(AUTHORITY, "region" + "/#", REGION_ID);
+		// All countries
+		matcher.addURI(AUTHORITY, "country", COUNTRY);
+		// A specific country
+		matcher.addURI(AUTHORITY, "country" + "/#", COUNTRY_ID);
 		// All attacks
 		matcher.addURI(AUTHORITY, AttackDao.TABLE_NAME, ATTACK);
 		// A specific attack
@@ -103,23 +111,25 @@ public class GtdProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(final SQLiteDatabase db) {
-			Log.d(LOG_TAG, "Creating database");
+			Log.d(LOG_TAG, "Creating databases");
 
-			if (LogConfig.DDP_DEBUG_LOGS_ENABLED) {
+			if (LogConfig.DDP_DEBUG_LOGS_ENABLED)
 				Log.d(LOG_TAG, "PoCProvider | createRegionTable start");
-			}
-			RegionDao.createTable(db);
-			if (LogConfig.DDP_DEBUG_LOGS_ENABLED) {
+			FilteredListDao.createTable(db, "region");
+			if (LogConfig.DDP_DEBUG_LOGS_ENABLED)
 				Log.d(LOG_TAG, "PoCProvider | createRegionTable end");
-			}
 
-			if (LogConfig.DDP_DEBUG_LOGS_ENABLED) {
+			if (LogConfig.DDP_DEBUG_LOGS_ENABLED)
+				Log.d(LOG_TAG, "PoCProvider | createCountryTable start");
+			FilteredListDao.createTable(db, "country");
+			if (LogConfig.DDP_DEBUG_LOGS_ENABLED)
+				Log.d(LOG_TAG, "PoCProvider | createCountryTable end");
+
+			if (LogConfig.DDP_DEBUG_LOGS_ENABLED)
 				Log.d(LOG_TAG, "PoCProvider | createAttackTable start");
-			}
 			AttackDao.createTable(db);
-			if (LogConfig.DDP_DEBUG_LOGS_ENABLED) {
+			if (LogConfig.DDP_DEBUG_LOGS_ENABLED)
 				Log.d(LOG_TAG, "PoCProvider | createAttackTable end");
-			}
 		}
 
 		@Override
@@ -150,16 +160,13 @@ public class GtdProvider extends ContentProvider {
 
 		switch (match) {
 		case REGION_ID:
-			id = uri.getPathSegments().get(1);
-			result = db.delete(TABLE_NAMES[table], whereWithId(id, selection), selectionArgs);
-			break;
-		case REGION:
-			result = db.delete(TABLE_NAMES[table], selection, selectionArgs);
-			break;
+		case COUNTRY_ID:
 		case ATTACK_ID:
 			id = uri.getPathSegments().get(1);
 			result = db.delete(TABLE_NAMES[table], whereWithId(id, selection), selectionArgs);
 			break;
+		case REGION:
+		case COUNTRY:
 		case ATTACK:
 			result = db.delete(TABLE_NAMES[table], selection, selectionArgs);
 			break;
@@ -176,9 +183,13 @@ public class GtdProvider extends ContentProvider {
 		final int match = sURIMatcher.match(uri);
 		switch (match) {
 		case REGION_ID:
-			return RegionDao.TYPE_ELEM_TYPE;
+			return FilteredListDao.TYPE_ELEM_TYPE;
 		case REGION:
-			return RegionDao.TYPE_DIR_TYPE;
+			return FilteredListDao.TYPE_DIR_TYPE;
+		case COUNTRY_ID:
+			return FilteredListDao.TYPE_ELEM_TYPE;
+		case COUNTRY:
+			return FilteredListDao.TYPE_DIR_TYPE;
 		case ATTACK_ID:
 			return AttackDao.TYPE_ELEM_TYPE;
 		case ATTACK:
@@ -207,9 +218,7 @@ public class GtdProvider extends ContentProvider {
 
 		switch (match) {
 		case REGION:
-			id = db.insert(TABLE_NAMES[table], "foo", values);
-			resultUri = ContentUris.withAppendedId(uri, id);
-			break;
+		case COUNTRY:
 		case ATTACK:
 			id = db.insert(TABLE_NAMES[table], "foo", values);
 			resultUri = ContentUris.withAppendedId(uri, id);
@@ -244,9 +253,20 @@ public class GtdProvider extends ContentProvider {
 		try {
 			switch (match) {
 			case REGION:
-				insertStmt = db.compileStatement(RegionDao.getBulkInsertString());
+				insertStmt = db.compileStatement(FilteredListDao.getBulkInsertString("region"));
 				for (final ContentValues value : values) {
-					RegionDao.bindValuesInBulkInsert(insertStmt, value);
+					FilteredListDao.bindValuesInBulkInsert(insertStmt, value);
+					insertStmt.execute();
+					insertStmt.clearBindings();
+				}
+				insertStmt.close();
+				db.setTransactionSuccessful();
+				numberInserted = values.length;
+				break;
+			case COUNTRY:
+				insertStmt = db.compileStatement(FilteredListDao.getBulkInsertString("country"));
+				for (final ContentValues value : values) {
+					FilteredListDao.bindValuesInBulkInsert(insertStmt, value);
 					insertStmt.execute();
 					insertStmt.clearBindings();
 				}
@@ -265,9 +285,11 @@ public class GtdProvider extends ContentProvider {
 				db.setTransactionSuccessful();
 				numberInserted = values.length;
 				break;
+
 			default:
 				throw new IllegalArgumentException("Unknown URI " + uri);
 			}
+
 		} finally {
 			db.endTransaction();
 		}
@@ -297,18 +319,14 @@ public class GtdProvider extends ContentProvider {
 
 		switch (match) {
 		case REGION_ID:
-			id = uri.getPathSegments().get(1);
-			c = db.query(TABLE_NAMES[table], projection, whereWithId(id, selection), selectionArgs, null, null,
-					sortOrder);
-			break;
-		case REGION:
-			c = db.query(TABLE_NAMES[table], projection, selection, selectionArgs, null, null, sortOrder);
-			break;
+		case COUNTRY_ID:
 		case ATTACK_ID:
 			id = uri.getPathSegments().get(1);
 			c = db.query(TABLE_NAMES[table], projection, whereWithId(id, selection), selectionArgs, null, null,
 					sortOrder);
 			break;
+		case REGION:
+		case COUNTRY:
 		case ATTACK:
 			c = db.query(TABLE_NAMES[table], projection, selection, selectionArgs, null, null, sortOrder);
 			break;

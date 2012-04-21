@@ -17,7 +17,6 @@ import android.provider.BaseColumns;
 
 import com.foxykeep.datadroid.provider.util.DatabaseUtil;
 import com.gtdbrowser.data.model.Attack;
-import com.gtdbrowser.data.model.Region;
 
 /**
  * {@link GtdContent} is the superclass of the various classes of content stored
@@ -28,12 +27,6 @@ import com.gtdbrowser.data.model.Region;
  */
 public abstract class GtdContent {
 	public static final Uri CONTENT_URI = Uri.parse("content://" + GtdProvider.AUTHORITY);
-
-	public interface RegionDaoColumns {
-		public static final String NAME = "name";
-		public static final String ID = "id";
-		public static final String NUM_ATTACKS = "num_attacks";
-	}
 
 	public interface AttackDaoColumns {
 		public static final String ID = "id";
@@ -136,69 +129,6 @@ public abstract class GtdContent {
 		public static final String SCITE3 = "scite3";
 		public static final String DBSOURCE = "dbsource";
 
-	}
-
-	public static final class RegionDao extends GtdContent implements RegionDaoColumns, BaseColumns {
-		public static final String TABLE_NAME = "region";
-		public static final Uri CONTENT_URI = Uri.parse(GtdContent.CONTENT_URI + "/" + TABLE_NAME);
-		public static final String TYPE_ELEM_TYPE = "vnd.android.cursor.item/com.gtdbrowser.data.provider.region";
-		public static final String TYPE_DIR_TYPE = "vnd.android.cursor.dir/com.gtdbrowser.data.provider.region";
-
-		public static final String MIN_ID_SELECTION = ID + " >= ?";
-		public static final String NAME_ORDER_BY = NUM_ATTACKS + " DESC";
-
-		public static final int CONTENT_ID_COLUMN = 0;
-		public static final int CONTENT_NAME_COLUMN = 1;
-		public static final int CONTENT_REGION_ID_COLUMN = 2;
-		public static final int CONTENT_NUM_ATTACKS_COLUMN = 3;
-		public static final String[] CONTENT_PROJECTION = new String[] { _ID, NAME, ID, NUM_ATTACKS };
-
-		static void createTable(final SQLiteDatabase db) {
-			final String s = " (" + _ID + " integer primary key autoincrement, " + NAME + " text, " + ID + " integer, "
-					+ NUM_ATTACKS + " integer " + ");";
-
-			db.execSQL("create table " + TABLE_NAME + s);
-
-			db.execSQL(DatabaseUtil.getCreateIndexString(TABLE_NAME, NAME));
-		}
-
-		static void upgradeTable(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
-			try {
-				db.execSQL("drop table " + TABLE_NAME);
-			} catch (final SQLException e) {
-			}
-			createTable(db);
-		}
-
-		public static String getBulkInsertString() {
-			final StringBuffer sqlRequest = new StringBuffer("INSERT INTO ");
-			sqlRequest.append(TABLE_NAME);
-			sqlRequest.append(" ( ");
-			sqlRequest.append(NAME);
-			sqlRequest.append(", ");
-			sqlRequest.append(ID);
-			sqlRequest.append(", ");
-			sqlRequest.append(NUM_ATTACKS);
-			sqlRequest.append(" ) ");
-			sqlRequest.append(" VALUES (?, ?, ?)");
-			return sqlRequest.toString();
-		}
-
-		public static void bindValuesInBulkInsert(final SQLiteStatement stmt, final ContentValues values) {
-			int i = 1;
-			String value = values.getAsString(NAME);
-			stmt.bindString(i++, value != null ? value : "");
-			stmt.bindLong(i++, values.getAsInteger(ID));
-			stmt.bindLong(i++, values.getAsInteger(NUM_ATTACKS));
-		}
-
-		public static ContentValues getContentValues(final Region region) {
-			ContentValues values = new ContentValues();
-			values.put(NAME, region.name);
-			values.put(ID, region.id);
-			values.put(NUM_ATTACKS, region.num_attacks);
-			return values;
-		}
 	}
 
 	public static final class AttackDao extends GtdContent implements AttackDaoColumns, BaseColumns {

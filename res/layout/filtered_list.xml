@@ -14,22 +14,22 @@
 		android:layout_height="wrap_content"
 		android:orientation="horizontal">
 		<Spinner
-			android:id="@+id/sp_return_format"
+			android:id="@+id/sp_filter"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:prompt="@string/region_list_sp_return_format_prompt"
+			android:prompt="@string/filtered_list_sp_filter_prompt"
 			android:entries="@array/return_format" />
 		<Button
 			android:id="@+id/b_load"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="@string/region_list_b_load" />
+			android:text="@string/filtered_list_b_load" />
 		<Button
 			android:id="@+id/b_clear_db"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="@string/region_list_b_clear_db" />
+			android:text="@string/filtered_list_b_clear_db" />
 	</LinearLayout>
 	<View
 		android:layout_width="fill_parent"
@@ -48,6 +48,6 @@
 			android:layout_height="wrap_content"
 			android:paddingTop="30dp"
 			android:gravity="center"
-			android:text="@string/region_list_tv_empty" />
+			android:text="@string/filtered_list_tv_empty" />
 	</FrameLayout>
 </LinearLayout>

@@ -6,9 +6,12 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,35 +21,39 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.gtdbrowser.R;
 import com.gtdbrowser.config.DialogConfig;
-import com.gtdbrowser.config.WSConfig;
-import com.gtdbrowser.data.provider.GtdContent.RegionDao;
+import com.gtdbrowser.data.provider.GtdContent;
+import com.gtdbrowser.data.provider.FilteredListDao;
 import com.gtdbrowser.data.requestmanager.GtdRequestManager;
 import com.gtdbrowser.data.requestmanager.GtdRequestManager.OnRequestFinishedListener;
 import com.gtdbrowser.data.service.GtdService;
 import com.gtdbrowser.util.NotifyingAsyncQueryHandler;
 import com.gtdbrowser.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 
-public class RegionListActivity extends ListActivity implements OnRequestFinishedListener, AsyncQueryListener,
+public class FilteredListActivity extends ListActivity implements OnRequestFinishedListener, AsyncQueryListener,
 		OnClickListener, OnScrollListener {
 
 	public static final String PREFS_NAME = "RegionListActivityPrefs";
+	public static final String END_PAGINATION = "end";
 
 	private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
 	private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
 	private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
 	private static final String SAVED_STATE_URI = "savedStateUri";
 
+	@SuppressWarnings("unused")
+	private Spinner mFilterSpinner;
 	private Button mButtonLoad;
 	private Button mButtonClearDb;
 
 	private GtdRequestManager mRequestManager;
 	private int mRequestId = -1;
 	private int priorFirst = -1;
-	private String uri = WSConfig.WS_REGION_LIST_URL;
+	private String ws_uri;
 
 	private NotifyingAsyncQueryHandler mQueryHandler;
 
@@ -55,29 +62,36 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 	private String mErrorDialogTitle;
 	private String mErrorDialogMessage;
 
+	private String filterType;
+	private String filterDefaultUri;
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		uri = settings.getString("uri", WSConfig.WS_REGION_LIST_URL);
+		Intent intent = getIntent();
+		filterType = intent.getStringExtra("filterType");
+		filterDefaultUri = intent.getStringExtra("filterDefaultUri");
 
-		setContentView(R.layout.region_list);
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		ws_uri = settings.getString(filterType + "_uri", filterDefaultUri);
+
+		setContentView(R.layout.filtered_list);
 		bindViews();
 
 		if (savedInstanceState != null) {
 			mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);
 			mErrorDialogTitle = savedInstanceState.getString(SAVED_STATE_ERROR_TITLE);
 			mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
-			uri = savedInstanceState.getString(SAVED_STATE_URI);
+			ws_uri = savedInstanceState.getString(SAVED_STATE_URI);
 		}
 
 		mRequestManager = GtdRequestManager.from(this);
-		mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
 		mInflater = getLayoutInflater();
-
-		mQueryHandler.startQuery(RegionDao.CONTENT_URI, RegionDao.CONTENT_PROJECTION, RegionDao.NAME_ORDER_BY);
+		mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
+		mQueryHandler.startQuery(Uri.parse(GtdContent.CONTENT_URI + "/" + filterType),
+				FilteredListDao.CONTENT_PROJECTION, FilteredListDao.NUM_ATTACKS_ORDER_BY);
 	}
 
 	@Override
@@ -90,7 +104,7 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 			} else {
 				mRequestId = -1;
 
-				// Get the number of regions in the database
+				// Get the number of rows in the database
 				int number = ((RegionListAdapter) getListAdapter()).getCursor().getCount();
 
 				if (number < 1) {
@@ -119,11 +133,13 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 		outState.putInt(SAVED_STATE_REQUEST_ID, mRequestId);
 		outState.putString(SAVED_STATE_ERROR_TITLE, mErrorDialogTitle);
 		outState.putString(SAVED_STATE_ERROR_MESSAGE, mErrorDialogMessage);
-		outState.putString(SAVED_STATE_URI, uri);
+		outState.putString(SAVED_STATE_URI, ws_uri);
 		super.onSaveInstanceState(outState);
 	}
 
 	private void bindViews() {
+		mFilterSpinner = (Spinner) findViewById(R.id.sp_filter);
+
 		mButtonLoad = (Button) findViewById(R.id.b_load);
 		mButtonLoad.setOnClickListener(this);
 
@@ -175,10 +191,10 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 	}
 
 	private void callRegionListWS() {
-		if (uri != null) {
+		if (!ws_uri.equals(END_PAGINATION)) {
 			setProgressBarIndeterminateVisibility(true);
 			mRequestManager.addOnRequestFinishedListener(this);
-			mRequestId = mRequestManager.getObjectList(uri);
+			mRequestId = mRequestManager.getObjectList(ws_uri);
 		}
 	}
 
@@ -188,12 +204,12 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 			callRegionListWS();
 		} else if (view == mButtonClearDb) {
 			priorFirst = -1;
-			uri = WSConfig.WS_REGION_LIST_URL;
+			ws_uri = filterDefaultUri;
 			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 			SharedPreferences.Editor editor = settings.edit();
-			editor.putString("uri", uri);
+			editor.putString(filterType + "_uri", ws_uri);
 			editor.commit();
-			mQueryHandler.startDelete(RegionDao.CONTENT_URI);
+			mQueryHandler.startDelete(Uri.parse(FilteredListDao.CONTENT_URI + "/" + filterType));
 		}
 	}
 
@@ -217,17 +233,19 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 					showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
 				}
 			}
-			if (payload.getString("nextURI") != null) {
-				uri = payload.getString("nextURI");
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-				SharedPreferences.Editor editor = settings.edit();
-				editor.putString("uri", uri);
-				editor.commit();
-			} else
-				uri = null;
+			if (payload.getString("nextURI") != null)
+				ws_uri = payload.getString("nextURI");
+			else
+				ws_uri = END_PAGINATION;
+			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putString(filterType + "_uri", ws_uri);
+			editor.commit();
 			// Nothing else to do if it works as the cursor is automatically
 			// updated
 		}
+		Log.d("HERE", "HERE");
+
 	}
 
 	@Override
@@ -253,9 +271,9 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 		}
 
 		public void populateView(final Cursor c) {
-			mTextViewName.setText(String.valueOf(c.getString(RegionDao.CONTENT_NAME_COLUMN)));
-			mTextViewId.setText(String.valueOf(c.getInt(RegionDao.CONTENT_REGION_ID_COLUMN)));
-			mTextViewNumAttacks.setText(String.valueOf(c.getInt(RegionDao.CONTENT_NUM_ATTACKS_COLUMN)));
+			mTextViewName.setText(String.valueOf(c.getString(FilteredListDao.CONTENT_NAME_COLUMN)));
+			mTextViewId.setText(String.valueOf(c.getInt(FilteredListDao.CONTENT_REGION_ID_COLUMN)));
+			mTextViewNumAttacks.setText(String.valueOf(c.getInt(FilteredListDao.CONTENT_NUM_ATTACKS_COLUMN)));
 		}
 	}
 
@@ -272,7 +290,7 @@ public class RegionListActivity extends ListActivity implements OnRequestFinishe
 
 		@Override
 		public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
-			View view = mInflater.inflate(R.layout.region_list_item, null);
+			View view = mInflater.inflate(R.layout.filtered_list_item, null);
 			view.setTag(new ViewHolder(view));
 			return view;
 		}

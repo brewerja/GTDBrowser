@@ -15,11 +15,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import com.gtdbrowser.R;
+import com.gtdbrowser.config.WSConfig;
 
 public class HomeActivity extends Activity implements OnClickListener {
 
 	private Button mButtonRegionList;
 	private Button mButtonAttackList;
+	private Button mButtonCountryList;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -32,6 +34,9 @@ public class HomeActivity extends Activity implements OnClickListener {
 	private void bindViews() {
 		mButtonRegionList = (Button) findViewById(R.id.b_region_list);
 		mButtonRegionList.setOnClickListener(this);
+		
+		mButtonCountryList = (Button) findViewById(R.id.b_country_list);
+		mButtonCountryList.setOnClickListener(this);
 
 		mButtonAttackList = (Button) findViewById(R.id.b_attack_list);
 		mButtonAttackList.setOnClickListener(this);
@@ -41,7 +46,14 @@ public class HomeActivity extends Activity implements OnClickListener {
 	public void onClick(final View view) {
 		Intent intent = null;
 		if (view == mButtonRegionList) {
-			intent = new Intent(this, RegionListActivity.class);
+			intent = new Intent(this, FilteredListActivity.class);
+			intent.putExtra("filterType", "region");
+			intent.putExtra("filterDefaultUri", WSConfig.WS_REGION_LIST_URL);
+		}
+		if (view == mButtonCountryList) {
+			intent = new Intent(this, FilteredListActivity.class);
+			intent.putExtra("filterType", "country");
+			intent.putExtra("filterDefaultUri", WSConfig.WS_COUNTRY_LIST_URL);
 		}
 		if (view == mButtonAttackList) {
 			intent = new Intent(this, AttackListActivity.class);

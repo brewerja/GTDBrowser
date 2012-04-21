@@ -14,6 +14,11 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/home_b_region_list" />
+		<Button
+		android:id="@+id/b_country_list"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/home_b_country_list" />
 	<Button
 		android:id="@+id/b_attack_list"
 		android:layout_width="fill_parent"
