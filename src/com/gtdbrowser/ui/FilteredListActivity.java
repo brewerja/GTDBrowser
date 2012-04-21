@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,7 +36,7 @@ import com.gtdbrowser.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 public class FilteredListActivity extends ListActivity implements OnRequestFinishedListener, AsyncQueryListener,
 		OnClickListener, OnScrollListener {
 
-	public static final String PREFS_NAME = "RegionListActivityPrefs";
+	public static final String PREFS_NAME = "FilteredListActivityPrefs";
 	public static final String END_PAGINATION = "end";
 
 	private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
@@ -70,10 +69,12 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
+		// Unpack the intent to get what the filtering will be.
 		Intent intent = getIntent();
 		filterType = intent.getStringExtra("filterType");
 		filterDefaultUri = intent.getStringExtra("filterDefaultUri");
 
+		// Retrieve the current web service URI for this filter type.
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		ws_uri = settings.getString(filterType + "_uri", filterDefaultUri);
 
@@ -87,6 +88,9 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 			ws_uri = savedInstanceState.getString(SAVED_STATE_URI);
 		}
 
+		// Get the request manager (for web service queries) and query handler
+		// (for database queries), then fire off a database query to populate
+		// the view.
 		mRequestManager = GtdRequestManager.from(this);
 		mInflater = getLayoutInflater();
 		mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
@@ -105,7 +109,7 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 				mRequestId = -1;
 
 				// Get the number of rows in the database
-				int number = ((RegionListAdapter) getListAdapter()).getCursor().getCount();
+				int number = ((FilteredListAdapter) getListAdapter()).getCursor().getCount();
 
 				if (number < 1) {
 					// In this case, we don't have a way to know if the request
@@ -233,6 +237,8 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 					showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
 				}
 			}
+			// Update the web service URI if there are more pages, otherwise
+			// call it the end of pagination on this filter type.
 			if (payload.getString("nextURI") != null)
 				ws_uri = payload.getString("nextURI");
 			else
@@ -244,15 +250,13 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 			// Nothing else to do if it works as the cursor is automatically
 			// updated
 		}
-		Log.d("HERE", "HERE");
-
 	}
 
 	@Override
 	public void onQueryComplete(final int token, final Object cookie, final Cursor cursor) {
-		RegionListAdapter adapter = (RegionListAdapter) getListAdapter();
+		FilteredListAdapter adapter = (FilteredListAdapter) getListAdapter();
 		if (adapter == null) {
-			adapter = new RegionListAdapter(this, cursor);
+			adapter = new FilteredListAdapter(this, cursor);
 			setListAdapter(adapter);
 		} else {
 			adapter.changeCursor(cursor);
@@ -272,14 +276,14 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 
 		public void populateView(final Cursor c) {
 			mTextViewName.setText(String.valueOf(c.getString(FilteredListDao.CONTENT_NAME_COLUMN)));
-			mTextViewId.setText(String.valueOf(c.getInt(FilteredListDao.CONTENT_REGION_ID_COLUMN)));
+			mTextViewId.setText(String.valueOf(c.getInt(FilteredListDao.CONTENT_OBJECT_ID_COLUMN)));
 			mTextViewNumAttacks.setText(String.valueOf(c.getInt(FilteredListDao.CONTENT_NUM_ATTACKS_COLUMN)));
 		}
 	}
 
-	class RegionListAdapter extends CursorAdapter {
+	class FilteredListAdapter extends CursorAdapter {
 
-		public RegionListAdapter(final Context context, final Cursor c) {
+		public FilteredListAdapter(final Context context, final Cursor c) {
 			super(context, c);
 		}
 
@@ -298,6 +302,8 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+		// If scrolled to within 5 of the current list end, go ahead and try to
+		// get more pages of data.
 		if (visibleItemCount < totalItemCount && (firstVisibleItem + visibleItemCount >= totalItemCount - 5)) {
 			if (firstVisibleItem != priorFirst) {
 				priorFirst = firstVisibleItem;

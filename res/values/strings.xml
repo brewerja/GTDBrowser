@@ -16,8 +16,9 @@
     <!-- HomeActivity texts -->
     <string name="home_b_region_list">Browse by Region</string>
     <string name="home_b_country_list">Browse by Country</string>
+    <string name="home_b_attacktype_list">Browse All Attack Types</string>
     <string name="home_b_attack_list">Browse All Attacks</string>
-
+    
     <!-- RegionListActivity texts -->
     <string name="filtered_list_title">GTD Browser > Filtered</string>
     <string name="filtered_list_sp_filter_prompt">Choose Filter</string>

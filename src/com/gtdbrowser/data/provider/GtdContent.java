@@ -707,9 +707,12 @@ public abstract class GtdContent {
 				stmt.bindLong(i++, valInt);
 			else
 				stmt.bindNull(i++);
-			stmt.bindString(i++, values.getAsString(DIVERT));
-			stmt.bindString(i++, values.getAsString(KIDHIJCOUNTRY));
-			stmt.bindString(i++, values.getAsString(RANSOM));
+			value = values.getAsString(DIVERT);
+			stmt.bindString(i++, value != null ? value : "");
+			value = values.getAsString(KIDHIJCOUNTRY);
+			stmt.bindString(i++, value != null ? value : "");
+			value = values.getAsString(RANSOM);
+			stmt.bindString(i++, value != null ? value : "");
 			valDouble = values.getAsDouble(RANSOMAMT);
 			if (valDouble != null)
 				stmt.bindDouble(i++, valDouble);

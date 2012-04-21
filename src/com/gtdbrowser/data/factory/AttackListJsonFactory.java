@@ -23,7 +23,7 @@ public class AttackListJsonFactory {
 			if (!jsonAttack.isNull("addnotes"))
 				attack.addnotes = jsonAttack.getString("addnotes");
 			if (!jsonAttack.isNull("alternative"))
-				attack.alternative = jsonAttack.getInt("alternative");
+				attack.alternative = jsonAttack.getString("alternative");
 			if (!jsonAttack.isNull("approxdate"))
 				attack.approxdate = jsonAttack.getString("approxdate");
 			if (!jsonAttack.isNull("attacktype1"))

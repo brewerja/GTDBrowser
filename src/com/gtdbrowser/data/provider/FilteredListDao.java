@@ -28,7 +28,7 @@ public class FilteredListDao extends GtdContent implements BaseColumns {
 
 	public static final int CONTENT_ID_COLUMN = 0;
 	public static final int CONTENT_NAME_COLUMN = 1;
-	public static final int CONTENT_REGION_ID_COLUMN = 2;
+	public static final int CONTENT_OBJECT_ID_COLUMN = 2;
 	public static final int CONTENT_NUM_ATTACKS_COLUMN = 3;
 	public static final String[] CONTENT_PROJECTION = new String[] { _ID, NAME, ID, NUM_ATTACKS };
 
@@ -65,18 +65,10 @@ public class FilteredListDao extends GtdContent implements BaseColumns {
 	}
 
 	public static void bindValuesInBulkInsert(final SQLiteStatement stmt, final ContentValues values) {
-		int i = 1;
 		String value = values.getAsString(NAME);
-		stmt.bindString(i++, value != null ? value : "");
-		stmt.bindLong(i++, values.getAsInteger(ID));
-		stmt.bindLong(i++, values.getAsInteger(NUM_ATTACKS));
-	}
-
-	public static HashMap<String, String> map;
-	static {
-		map = new HashMap<String, String>();
-		map.put("regions", "region");
-		map.put("countries", "country");
+		stmt.bindString(CONTENT_NAME_COLUMN, value != null ? value : "");
+		stmt.bindLong(CONTENT_OBJECT_ID_COLUMN, values.getAsInteger(ID));
+		stmt.bindLong(CONTENT_NUM_ATTACKS_COLUMN, values.getAsInteger(NUM_ATTACKS));
 	}
 
 	public static ContentValues getContentValues(final FilteredListModel model) {
@@ -87,10 +79,18 @@ public class FilteredListDao extends GtdContent implements BaseColumns {
 		return values;
 	}
 
+	public static HashMap<String, String> map;
+	static {
+		map = new HashMap<String, String>();
+		map.put("regions", "region");
+		map.put("countries", "country");
+		map.put("attacktypes", "attacktype");
+	}
+
 	public static String getTableNameFromUri(String ws_uri) {
 		// TODO: Little bit of a hack.
-		String uri = map.get(ws_uri.split(WSConfig.SERVER_URI + WSConfig.API_PATH)[1].split("/")[1]);
-		return uri;
+		String tableName = map.get(ws_uri.split(WSConfig.SERVER_URI + WSConfig.API_PATH)[1].split("/")[1]);
+		return tableName;
 	}
 
 }

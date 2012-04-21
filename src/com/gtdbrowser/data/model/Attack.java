@@ -3,7 +3,7 @@ package com.gtdbrowser.data.model;
 public class Attack {
 
 	public String addnotes;
-	public Integer alternative;
+	public String alternative;
 	public String approxdate;
 	public String attacktype1;
 	public String attacktype2;

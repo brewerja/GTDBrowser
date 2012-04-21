@@ -22,7 +22,8 @@ public class HomeActivity extends Activity implements OnClickListener {
 	private Button mButtonRegionList;
 	private Button mButtonAttackList;
 	private Button mButtonCountryList;
-
+	private Button mButtonAttackTypeList;
+	
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,6 +39,9 @@ public class HomeActivity extends Activity implements OnClickListener {
 		mButtonCountryList = (Button) findViewById(R.id.b_country_list);
 		mButtonCountryList.setOnClickListener(this);
 
+		mButtonAttackTypeList = (Button) findViewById(R.id.b_attacktype_list);
+		mButtonAttackTypeList.setOnClickListener(this);
+		
 		mButtonAttackList = (Button) findViewById(R.id.b_attack_list);
 		mButtonAttackList.setOnClickListener(this);
 	}
@@ -54,6 +58,11 @@ public class HomeActivity extends Activity implements OnClickListener {
 			intent = new Intent(this, FilteredListActivity.class);
 			intent.putExtra("filterType", "country");
 			intent.putExtra("filterDefaultUri", WSConfig.WS_COUNTRY_LIST_URL);
+		}
+		if (view == mButtonAttackTypeList) {
+			intent = new Intent(this, FilteredListActivity.class);
+			intent.putExtra("filterType", "attacktype");
+			intent.putExtra("filterDefaultUri", WSConfig.WS_ATTACKTYPE_LIST_URL);
 		}
 		if (view == mButtonAttackList) {
 			intent = new Intent(this, AttackListActivity.class);
