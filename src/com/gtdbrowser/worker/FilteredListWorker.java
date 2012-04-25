@@ -73,7 +73,7 @@ public class FilteredListWorker {
 			object.name = jsonObject.getString("name");
 			object.id = jsonObject.getInt("id");
 			object.num_attacks = jsonObject.getInt("num_attacks");
-			//object.filter = jsonObject.getString("filter");
+			object.checked = 0;
 
 			filteredList.add(object);
 		}

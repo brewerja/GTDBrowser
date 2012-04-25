@@ -1,32 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
-	License : As long as you retain this notice you can do whatever you want 
-	with this stuff. If we meet some day, and you think this stuff is worth it, 
-	you can buy me a beer in return -->
-<RelativeLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content"
-	android:layout_height="fill_parent"
-	android:padding="5dp"
-	android:paddingRight="?android:attr/scrollbarSize">
-	<TextView
-		android:id="@+id/tv_name"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentLeft="true"
-		android:layout_alignParentTop="true"
-		android:textAppearance="?android:attr/textAppearanceLarge" />
-	<TextView
-		android:id="@+id/tv_num_attacks"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentRight="true"
-		android:layout_alignParentTop="true"
-		android:textAppearance="?android:attr/textAppearanceLarge" />
-	<TextView
-		android:id="@+id/tv_id"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/tv_name"
-		android:layout_alignParentLeft="true" />
-</RelativeLayout>
+<com.gtdbrowser.ui.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="5dip" >
+
+    <CheckedTextView
+        android:id="@+id/tv_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:ellipsize="marquee"
+        android:gravity="center_vertical"
+        android:singleLine="false"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tv_num_attacks"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+</com.gtdbrowser.ui.CheckableLinearLayout>

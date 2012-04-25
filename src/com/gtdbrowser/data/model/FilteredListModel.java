@@ -4,5 +4,5 @@ public class FilteredListModel {
 	public String name;
 	public int id;
 	public int num_attacks;
-	public String filter;
+	public int checked;
 }

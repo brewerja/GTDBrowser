@@ -18,6 +18,7 @@ public class FilteredListDao extends GtdContent implements BaseColumns {
 	public static final String NAME = "name";
 	public static final String ID = "id";
 	public static final String NUM_ATTACKS = "num_attacks";
+	public static final String CHECKED = "checked";
 
 	public static final Uri CONTENT_URI_BASE = Uri.parse(GtdContent.CONTENT_URI + "/");
 	public static final String TYPE_ELEM_TYPE = "vnd.android.cursor.item/com.gtdbrowser.data.provider.region";
@@ -30,11 +31,12 @@ public class FilteredListDao extends GtdContent implements BaseColumns {
 	public static final int CONTENT_NAME_COLUMN = 1;
 	public static final int CONTENT_OBJECT_ID_COLUMN = 2;
 	public static final int CONTENT_NUM_ATTACKS_COLUMN = 3;
-	public static final String[] CONTENT_PROJECTION = new String[] { _ID, NAME, ID, NUM_ATTACKS };
+	public static final int CONTENT_CHECKED_COLUMN = 4;
+	public static final String[] CONTENT_PROJECTION = new String[] { _ID, NAME, ID, NUM_ATTACKS, CHECKED };
 
 	public static void createTable(final SQLiteDatabase db, String table_name) {
 		final String s = " (" + _ID + " integer primary key autoincrement, " + NAME + " text, " + ID + " integer, "
-				+ NUM_ATTACKS + " integer " + ");";
+				+ NUM_ATTACKS + " integer, " + CHECKED + " integer" + ");";
 
 		db.execSQL("create table " + table_name + s);
 
@@ -59,8 +61,10 @@ public class FilteredListDao extends GtdContent implements BaseColumns {
 		sqlRequest.append(ID);
 		sqlRequest.append(", ");
 		sqlRequest.append(NUM_ATTACKS);
+		sqlRequest.append(", ");
+		sqlRequest.append(CHECKED);
 		sqlRequest.append(" ) ");
-		sqlRequest.append(" VALUES (?, ?, ?)");
+		sqlRequest.append(" VALUES (?, ?, ?, ?)");
 		return sqlRequest.toString();
 	}
 
@@ -69,6 +73,7 @@ public class FilteredListDao extends GtdContent implements BaseColumns {
 		stmt.bindString(CONTENT_NAME_COLUMN, value != null ? value : "");
 		stmt.bindLong(CONTENT_OBJECT_ID_COLUMN, values.getAsInteger(ID));
 		stmt.bindLong(CONTENT_NUM_ATTACKS_COLUMN, values.getAsInteger(NUM_ATTACKS));
+		stmt.bindLong(CONTENT_CHECKED_COLUMN, values.getAsLong(CHECKED));
 	}
 
 	public static ContentValues getContentValues(final FilteredListModel model) {
@@ -76,6 +81,7 @@ public class FilteredListDao extends GtdContent implements BaseColumns {
 		values.put(NAME, model.name);
 		values.put(ID, model.id);
 		values.put(NUM_ATTACKS, model.num_attacks);
+		values.put(CHECKED, model.checked);
 		return values;
 	}
 

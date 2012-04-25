@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,8 +19,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -48,6 +52,7 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 	private Spinner mFilterSpinner;
 	private Button mButtonLoad;
 	private Button mButtonClearDb;
+	private ListView listView;
 
 	private GtdRequestManager mRequestManager;
 	private int mRequestId = -1;
@@ -96,6 +101,23 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 		mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
 		mQueryHandler.startQuery(Uri.parse(GtdContent.CONTENT_URI + "/" + filterType),
 				FilteredListDao.CONTENT_PROJECTION, FilteredListDao.NUM_ATTACKS_ORDER_BY);
+
+		// Handle item selections...update the checked column in the proper
+		// table.
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+				Cursor c = (Cursor) parent.getItemAtPosition(position);
+				Integer checked = c.getInt(FilteredListDao.CONTENT_CHECKED_COLUMN);
+				ContentValues values = new ContentValues();
+				if (checked == 1)
+					values.put(FilteredListDao.CHECKED, 0);
+				else
+					values.put(FilteredListDao.CHECKED, 1);
+				getContentResolver().update(Uri.parse(FilteredListDao.CONTENT_URI + "/" + filterType), values,
+						"_ID = " + id, null);
+			}
+		});
 	}
 
 	@Override
@@ -150,7 +172,8 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 		mButtonClearDb = (Button) findViewById(R.id.b_clear_db);
 		mButtonClearDb.setOnClickListener(this);
 
-		getListView().setOnScrollListener(this);
+		listView = getListView();
+		listView.setOnScrollListener(this);
 	}
 
 	@Override
@@ -170,7 +193,7 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 			b.setNeutralButton(getString(android.R.string.ok), null);
 			b.setPositiveButton(getString(R.string.dialog_button_retry), new DialogInterface.OnClickListener() {
 				public void onClick(final DialogInterface dialog, final int which) {
-					callRegionListWS();
+					callFilteredListWS();
 				}
 			});
 			b.setTitle(R.string.dialog_error_connexion_error_title);
@@ -194,7 +217,7 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 		}
 	}
 
-	private void callRegionListWS() {
+	private void callFilteredListWS() {
 		if (!ws_uri.equals(END_PAGINATION)) {
 			setProgressBarIndeterminateVisibility(true);
 			mRequestManager.addOnRequestFinishedListener(this);
@@ -205,7 +228,7 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 	@Override
 	public void onClick(final View view) {
 		if (view == mButtonLoad) {
-			callRegionListWS();
+			callFilteredListWS();
 		} else if (view == mButtonClearDb) {
 			priorFirst = -1;
 			ws_uri = filterDefaultUri;
@@ -247,6 +270,14 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putString(filterType + "_uri", ws_uri);
 			editor.commit();
+
+			int count = listView.getCount();
+			for (int i = 0; i < count; i++) {
+				Integer item = ((Cursor) listView.getItemAtPosition(i)).getInt(FilteredListDao.CONTENT_CHECKED_COLUMN);
+				if (item == 1)
+					listView.setItemChecked(i, true);
+
+			}
 			// Nothing else to do if it works as the cursor is automatically
 			// updated
 		}
@@ -261,22 +292,27 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 		} else {
 			adapter.changeCursor(cursor);
 		}
+
+		int count = listView.getCount();
+		for (int i = 0; i < count; i++) {
+			Cursor c = ((Cursor) listView.getItemAtPosition(i));
+			Integer item = c.getInt(FilteredListDao.CONTENT_CHECKED_COLUMN);
+			if (item == 1)
+				listView.setItemChecked(i, true);
+		}
 	}
 
 	class ViewHolder {
 		private TextView mTextViewName;
-		private TextView mTextViewId;
 		private TextView mTextViewNumAttacks;
 
 		public ViewHolder(final View view) {
 			mTextViewName = (TextView) view.findViewById(R.id.tv_name);
-			mTextViewId = (TextView) view.findViewById(R.id.tv_id);
 			mTextViewNumAttacks = (TextView) view.findViewById(R.id.tv_num_attacks);
 		}
 
 		public void populateView(final Cursor c) {
 			mTextViewName.setText(String.valueOf(c.getString(FilteredListDao.CONTENT_NAME_COLUMN)));
-			mTextViewId.setText(String.valueOf(c.getInt(FilteredListDao.CONTENT_OBJECT_ID_COLUMN)));
 			mTextViewNumAttacks.setText(String.valueOf(c.getInt(FilteredListDao.CONTENT_NUM_ATTACKS_COLUMN)));
 		}
 	}
@@ -307,7 +343,7 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 		if (visibleItemCount < totalItemCount && (firstVisibleItem + visibleItemCount >= totalItemCount - 5)) {
 			if (firstVisibleItem != priorFirst) {
 				priorFirst = firstVisibleItem;
-				callRegionListWS();
+				callFilteredListWS();
 			}
 		}
 	}

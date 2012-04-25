@@ -363,7 +363,6 @@ public class GtdProvider extends ContentProvider {
 
 	@Override
 	public int update(final Uri uri, final ContentValues values, final String selection, final String[] selectionArgs) {
-		// TODO: IS THIS EVER USED?
 		final int match = sURIMatcher.match(uri);
 		final Context context = getContext();
 		// Pick the correct database for this operation
@@ -377,6 +376,9 @@ public class GtdProvider extends ContentProvider {
 
 		switch (match) {
 		case ATTACK:
+		case REGION:
+		case COUNTRY:
+		case ATTACKTYPE:
 			result = db.update(TABLE_NAMES[table], values, selection, selectionArgs);
 			break;
 		default:
