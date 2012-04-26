@@ -10,12 +10,16 @@ package com.gtdbrowser.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import com.gtdbrowser.R;
 import com.gtdbrowser.config.WSConfig;
+import com.gtdbrowser.data.provider.FilteredListDao;
 
 public class HomeActivity extends Activity implements OnClickListener {
 
@@ -23,7 +27,7 @@ public class HomeActivity extends Activity implements OnClickListener {
 	private Button mButtonAttackList;
 	private Button mButtonCountryList;
 	private Button mButtonAttackTypeList;
-	
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -35,13 +39,13 @@ public class HomeActivity extends Activity implements OnClickListener {
 	private void bindViews() {
 		mButtonRegionList = (Button) findViewById(R.id.b_region_list);
 		mButtonRegionList.setOnClickListener(this);
-		
+
 		mButtonCountryList = (Button) findViewById(R.id.b_country_list);
 		mButtonCountryList.setOnClickListener(this);
 
 		mButtonAttackTypeList = (Button) findViewById(R.id.b_attacktype_list);
 		mButtonAttackTypeList.setOnClickListener(this);
-		
+
 		mButtonAttackList = (Button) findViewById(R.id.b_attack_list);
 		mButtonAttackList.setOnClickListener(this);
 	}
@@ -65,7 +69,30 @@ public class HomeActivity extends Activity implements OnClickListener {
 			intent.putExtra("filterDefaultUri", WSConfig.WS_ATTACKTYPE_LIST_URL);
 		}
 		if (view == mButtonAttackList) {
+			String[] tables = { "region", "country", "attacktype" };
+			String[] projection = { FilteredListDao.ID };
+			StringBuilder filters = new StringBuilder("");
+			
+			for (String table : tables) {
+				Cursor c = getContentResolver().query(Uri.parse(FilteredListDao.CONTENT_URI + "/" + table),
+						projection, "checked = 1", null, FilteredListDao.ID);
+				if (c == null) {
+					Log.i("COUNT", "NULL CURSOR");
+				} else if (c.getCount() < 1) {
+					Log.i("COUNT", new Integer(c.getCount()).toString());
+				} else {
+					while (c.moveToNext()) {
+						String id = new Integer(c.getInt(0)).toString();
+						filters.append("&" + table + "=" + id);
+						Log.i(table, new Integer(c.getInt(0)).toString());
+					}
+					Log.i("COUNT", new Integer(c.getCount()).toString());
+
+				}
+			}
 			intent = new Intent(this, AttackListActivity.class);
+			intent.putExtra("filterType", "attacks");
+			intent.putExtra("filterDefaultUri", WSConfig.WS_ATTACK_LIST_URL + filters.toString());
 		}
 
 		if (intent != null) {

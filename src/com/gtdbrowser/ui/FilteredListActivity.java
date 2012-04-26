@@ -237,6 +237,7 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 			editor.putString(filterType + "_uri", ws_uri);
 			editor.commit();
 			mQueryHandler.startDelete(Uri.parse(FilteredListDao.CONTENT_URI + "/" + filterType));
+			listView.clearChoices();
 		}
 	}
 

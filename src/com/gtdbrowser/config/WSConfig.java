@@ -16,7 +16,7 @@ public class WSConfig {
 			+ INCREMENT;
 	public static final String WS_REGION_LIST_URL = SERVER_URI + API_PATH + "/regions/?order_by=-num_attacks&limit="
 			+ INCREMENT;
-	public static final String WS_ATTACKTYPE_LIST_URL = SERVER_URI + API_PATH + "/attacktypes/?order_by=-num_attacks&limit="
-			+ INCREMENT;
-	public static final String WS_ATTACK_LIST_URL = SERVER_URI + API_PATH + "/attacks/";
+	public static final String WS_ATTACKTYPE_LIST_URL = SERVER_URI + API_PATH
+			+ "/attacktypes/?order_by=-num_attacks&limit=" + INCREMENT;
+	public static final String WS_ATTACK_LIST_URL = SERVER_URI + API_PATH + "/attacks/?order_by=-id&limit=" + INCREMENT;
 }

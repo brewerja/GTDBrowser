@@ -53,17 +53,20 @@ public class GtdService extends WorkerService {
 	@Override
 	protected void onHandleIntent(final Intent intent) {
 		final int workerType = intent.getIntExtra(INTENT_EXTRA_WORKER_TYPE, -1);
+		String uri;
+		Bundle resultBundle;
 		
 		try {
 			switch (workerType) {
 			case WORKER_TYPE_FILTERED_LIST:
-				String uri = intent.getStringExtra(INTENT_EXTRA_URI);
-				Bundle resultBundle = FilteredListWorker.start(this, uri);
+				uri = intent.getStringExtra(INTENT_EXTRA_URI);
+				resultBundle = FilteredListWorker.start(this, uri);
 				sendSuccess(intent, resultBundle);
 				break;
 			case WORKER_TYPE_ATTACK_LIST:
-				AttackListWorker.start(this, 1);
-				sendSuccess(intent, null);
+				uri = intent.getStringExtra(INTENT_EXTRA_URI);
+				resultBundle = AttackListWorker.start(this, uri);
+				sendSuccess(intent, resultBundle);
 				break;
 			}
 		} catch (final IllegalStateException e) {

@@ -138,7 +138,7 @@ public abstract class GtdContent {
 		public static final String TYPE_DIR_TYPE = "vnd.android.cursor.dir/com.gtdbrowser.data.provider.attacks";
 
 		public static final String MIN_ID_SELECTION = ID + " >= ?";
-		public static final String ID_ORDER_BY = ID + " ASC";
+		public static final String ID_ORDER_BY = ID + " DESC";
 
 		public static final int CONTENT_GTDID_COLUMN = 1;
 		public static final int CONTENT_DATE_COLUMN = 2;

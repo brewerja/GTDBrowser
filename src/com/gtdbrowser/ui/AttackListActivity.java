@@ -6,6 +6,8 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,8 +15,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.gtdbrowser.R;
@@ -27,17 +33,26 @@ import com.gtdbrowser.util.NotifyingAsyncQueryHandler;
 import com.gtdbrowser.util.NotifyingAsyncQueryHandler.AsyncQueryListener;
 
 public class AttackListActivity extends ListActivity implements OnRequestFinishedListener, AsyncQueryListener,
-		OnClickListener {
+		OnClickListener, OnScrollListener {
+
+	public static final String PREFS_NAME = "AttackListActivityPrefs";
+	public static final String END_PAGINATION = "end";
 
 	private static final String SAVED_STATE_REQUEST_ID = "savedStateRequestId";
 	private static final String SAVED_STATE_ERROR_TITLE = "savedStateErrorTitle";
 	private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
+	private static final String SAVED_STATE_URI = "savedStateUri";
 
+	@SuppressWarnings("unused")
+	private Spinner mFilterSpinner;
 	private Button mButtonLoad;
 	private Button mButtonClearDb;
+	private ListView listView;
 
 	private GtdRequestManager mRequestManager;
 	private int mRequestId = -1;
+	private int priorFirst = -1;
+	private String ws_uri;
 
 	private NotifyingAsyncQueryHandler mQueryHandler;
 
@@ -46,10 +61,22 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 	private String mErrorDialogTitle;
 	private String mErrorDialogMessage;
 
+	private String filter;
+	private String filterDefaultUri;
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
+		// Unpack the intent to get what the filtering will be.
+		Intent intent = getIntent();
+		filter = intent.getStringExtra("filterType");
+		filterDefaultUri = intent.getStringExtra("filterDefaultUri");
+
+		// Retrieve the current web service URI for this filter type.
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		ws_uri = settings.getString(filter + "_uri", filterDefaultUri);
 
 		setContentView(R.layout.attack_list);
 		bindViews();
@@ -58,13 +85,18 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 			mRequestId = savedInstanceState.getInt(SAVED_STATE_REQUEST_ID, -1);
 			mErrorDialogTitle = savedInstanceState.getString(SAVED_STATE_ERROR_TITLE);
 			mErrorDialogMessage = savedInstanceState.getString(SAVED_STATE_ERROR_MESSAGE);
+			ws_uri = savedInstanceState.getString(SAVED_STATE_URI);
 		}
 
+		// Get the request manager (for web service queries) and query handler
+		// (for database queries), then fire off a database query to populate
+		// the view.
 		mRequestManager = GtdRequestManager.from(this);
-		mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
 		mInflater = getLayoutInflater();
+		mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
+		mQueryHandler.startQuery(AttackDao.CONTENT_URI, AttackDao.CONTENT_PROJECTION2,
+				AttackDao.ID_ORDER_BY);
 
-		mQueryHandler.startQuery(AttackDao.CONTENT_URI, AttackDao.CONTENT_PROJECTION2, AttackDao.ID_ORDER_BY);
 	}
 
 	@Override
@@ -77,7 +109,7 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 			} else {
 				mRequestId = -1;
 
-				// Get the number of attacks in the database
+				// Get the number of rows in the database
 				int number = ((AttackListAdapter) getListAdapter()).getCursor().getCount();
 
 				if (number < 1) {
@@ -103,19 +135,24 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
-		super.onSaveInstanceState(outState);
-
 		outState.putInt(SAVED_STATE_REQUEST_ID, mRequestId);
 		outState.putString(SAVED_STATE_ERROR_TITLE, mErrorDialogTitle);
 		outState.putString(SAVED_STATE_ERROR_MESSAGE, mErrorDialogMessage);
+		outState.putString(SAVED_STATE_URI, ws_uri);
+		super.onSaveInstanceState(outState);
 	}
 
 	private void bindViews() {
+		mFilterSpinner = (Spinner) findViewById(R.id.sp_filter);
+
 		mButtonLoad = (Button) findViewById(R.id.b_load);
 		mButtonLoad.setOnClickListener(this);
 
 		mButtonClearDb = (Button) findViewById(R.id.b_clear_db);
 		mButtonClearDb.setOnClickListener(this);
+
+		listView = getListView();
+		listView.setOnScrollListener(this);
 	}
 
 	@Override
@@ -160,9 +197,11 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 	}
 
 	private void callAttackListWS() {
-		setProgressBarIndeterminateVisibility(true);
-		mRequestManager.addOnRequestFinishedListener(this);
-		mRequestId = mRequestManager.getAttackList();
+		if (!ws_uri.equals(END_PAGINATION)) {
+			setProgressBarIndeterminateVisibility(true);
+			mRequestManager.addOnRequestFinishedListener(this);
+			mRequestId = mRequestManager.getAttackList(ws_uri);
+		}
 	}
 
 	@Override
@@ -170,7 +209,14 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 		if (view == mButtonLoad) {
 			callAttackListWS();
 		} else if (view == mButtonClearDb) {
+			priorFirst = -1;
+			ws_uri = filterDefaultUri;
+			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putString(filter + "_uri", ws_uri);
+			editor.commit();
 			mQueryHandler.startDelete(AttackDao.CONTENT_URI);
+			listView.clearChoices();
 		}
 	}
 
@@ -194,7 +240,19 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 					showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
 				}
 			}
-			// Nothing to do if it works as the cursor is automatically updated
+			// Update the web service URI if there are more pages, otherwise
+			// call it the end of pagination on this filter type.
+			if (payload.getString("nextURI") != null)
+				ws_uri = payload.getString("nextURI");
+			else
+				ws_uri = END_PAGINATION;
+			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putString(filter + "_uri", ws_uri);
+			editor.commit();
+
+			// Nothing else to do if it works as the cursor is automatically
+			// updated
 		}
 	}
 
@@ -244,5 +302,21 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 			view.setTag(new ViewHolder(view));
 			return view;
 		}
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+		// If scrolled to within 5 of the current list end, go ahead and try to
+		// get more pages of data.
+		if (visibleItemCount < totalItemCount && (firstVisibleItem + visibleItemCount >= totalItemCount - 10)) {
+			if (firstVisibleItem != priorFirst) {
+				priorFirst = firstVisibleItem;
+				callAttackListWS();
+			}
+		}
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
 	}
 }
