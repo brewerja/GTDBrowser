@@ -91,6 +91,9 @@ public class FilteredListDao extends GtdContent implements BaseColumns {
 		map.put("regions", "region");
 		map.put("countries", "country");
 		map.put("attacktypes", "attacktype");
+		map.put("targettypes", "targettype");
+		map.put("weapontypes", "weapontype");
+		map.put("dbsources", "dbsource");
 	}
 
 	public static String getTableNameFromUri(String ws_uri) {

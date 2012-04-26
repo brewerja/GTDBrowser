@@ -14,17 +14,20 @@
     <string name="dialog_button_retry">Retry</string>
 
     <!-- HomeActivity texts -->
-    <string name="home_b_region_list">Browse by Region</string>
-    <string name="home_b_country_list">Browse by Country</string>
-    <string name="home_b_attacktype_list">Browse All Attack Types</string>
-    <string name="home_b_attack_list">Browse All Attacks</string>
+    <string name="home_b_region_list">Filter by Region</string>
+    <string name="home_b_country_list">Filter by Country</string>
+    <string name="home_b_attacktype_list">Filter by Attack Type</string>
+    <string name="home_b_targettype_list">Filter by Target Type</string>
+    <string name="home_b_weapontype_list">Filter by Weapon Type</string>
+    <string name="home_b_dbsource_list">Filter by Database Source</string>    
+    <string name="home_b_attack_list">Browse Query Results</string>
     
     <!-- FilteredListActivity texts -->
     <string name="filtered_list_title">GTD Browser > Filtered</string>
     <string name="filtered_list_sp_filter_prompt">Choose Filter</string>
     <string name="filtered_list_b_load">Load</string>
     <string name="filtered_list_b_clear_db">Clear DB</string>
-    <string name="filtered_list_tv_empty">0 regions found</string>
+    <string name="filtered_list_tv_empty">Press Load to Populate the View</string>
     
     <string name="attack_list_title">GTD Browser > Attacks</string>
     <string name="attack_list_tv_empty">0 attacks found</string>

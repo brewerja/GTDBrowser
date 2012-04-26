@@ -51,11 +51,20 @@ public class GtdProvider extends ContentProvider {
 
 	private static final int ATTACKTYPE_BASE = 0x3000;
 	private static final int ATTACKTYPE = ATTACKTYPE_BASE;
+	
+	private static final int TARGETTYPE_BASE = 0x4000;
+	private static final int TARGETTYPE = TARGETTYPE_BASE;
+	
+	private static final int WEAPONTYPE_BASE = 0x5000;
+	private static final int WEAPONTYPE = WEAPONTYPE_BASE;
+	
+	private static final int DBSOURCE_BASE = 0x6000;
+	private static final int DBSOURCE = DBSOURCE_BASE;
 
 	private static final int BASE_SHIFT = 12; // DO NOT TOUCH !
 	// 12 bits to the base type: 0, 0x1000, 0x2000, etc.
 
-	private static final String[] TABLE_NAMES = { AttackDao.TABLE_NAME, "region", "country", "attacktype" };
+	private static final String[] TABLE_NAMES = { AttackDao.TABLE_NAME, "region", "country", "attacktype", "targettype", "weapontype", "dbsource" };
 
 	private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -68,6 +77,12 @@ public class GtdProvider extends ContentProvider {
 		matcher.addURI(AUTHORITY, "country", COUNTRY);
 		// All attack types
 		matcher.addURI(AUTHORITY, "attacktype", ATTACKTYPE);
+		// All target types
+		matcher.addURI(AUTHORITY, "targettype", TARGETTYPE);
+		// All weapon types
+		matcher.addURI(AUTHORITY, "weapontype", WEAPONTYPE);
+		// All database sources
+		matcher.addURI(AUTHORITY, "dbsource", DBSOURCE);
 		// All attacks
 		matcher.addURI(AUTHORITY, AttackDao.TABLE_NAME, ATTACK);
 		// A specific attack
@@ -107,29 +122,13 @@ public class GtdProvider extends ContentProvider {
 		public void onCreate(final SQLiteDatabase db) {
 			Log.d(LOG_TAG, "Creating databases");
 
-			if (LogConfig.DDP_DEBUG_LOGS_ENABLED)
-				Log.d(LOG_TAG, "PoCProvider | createRegionTable start");
 			FilteredListDao.createTable(db, "region");
-			if (LogConfig.DDP_DEBUG_LOGS_ENABLED)
-				Log.d(LOG_TAG, "PoCProvider | createRegionTable end");
-
-			if (LogConfig.DDP_DEBUG_LOGS_ENABLED)
-				Log.d(LOG_TAG, "PoCProvider | createCountryTable start");
 			FilteredListDao.createTable(db, "country");
-			if (LogConfig.DDP_DEBUG_LOGS_ENABLED)
-				Log.d(LOG_TAG, "PoCProvider | createCountryTable end");
-
-			if (LogConfig.DDP_DEBUG_LOGS_ENABLED)
-				Log.d(LOG_TAG, "PoCProvider | createAttackTypeTable start");
 			FilteredListDao.createTable(db, "attacktype");
-			if (LogConfig.DDP_DEBUG_LOGS_ENABLED)
-				Log.d(LOG_TAG, "PoCProvider | createAttackTypeTable end");
-
-			if (LogConfig.DDP_DEBUG_LOGS_ENABLED)
-				Log.d(LOG_TAG, "PoCProvider | createAttackTable start");
+			FilteredListDao.createTable(db, "targettype");
+			FilteredListDao.createTable(db, "weapontype");
+			FilteredListDao.createTable(db, "dbsource");
 			AttackDao.createTable(db);
-			if (LogConfig.DDP_DEBUG_LOGS_ENABLED)
-				Log.d(LOG_TAG, "PoCProvider | createAttackTable end");
 		}
 
 		@Override
@@ -166,6 +165,9 @@ public class GtdProvider extends ContentProvider {
 		case REGION:
 		case COUNTRY:
 		case ATTACKTYPE:
+		case TARGETTYPE:
+		case WEAPONTYPE:
+		case DBSOURCE:
 		case ATTACK:
 			result = db.delete(TABLE_NAMES[table], selection, selectionArgs);
 			break;
@@ -184,6 +186,9 @@ public class GtdProvider extends ContentProvider {
 		case REGION:
 		case COUNTRY:
 		case ATTACKTYPE:
+		case TARGETTYPE:
+		case WEAPONTYPE:
+		case DBSOURCE:
 			return FilteredListDao.TYPE_DIR_TYPE;
 		case ATTACK_ID:
 			return AttackDao.TYPE_ELEM_TYPE;
@@ -215,6 +220,9 @@ public class GtdProvider extends ContentProvider {
 		case REGION:
 		case COUNTRY:
 		case ATTACKTYPE:
+		case TARGETTYPE:
+		case WEAPONTYPE:
+		case DBSOURCE:
 		case ATTACK:
 			id = db.insert(TABLE_NAMES[table], "foo", values);
 			resultUri = ContentUris.withAppendedId(uri, id);
@@ -283,6 +291,39 @@ public class GtdProvider extends ContentProvider {
 				db.setTransactionSuccessful();
 				numberInserted = values.length;
 				break;
+			case TARGETTYPE:
+				insertStmt = db.compileStatement(FilteredListDao.getBulkInsertString("targettype"));
+				for (final ContentValues value : values) {
+					FilteredListDao.bindValuesInBulkInsert(insertStmt, value);
+					insertStmt.execute();
+					insertStmt.clearBindings();
+				}
+				insertStmt.close();
+				db.setTransactionSuccessful();
+				numberInserted = values.length;
+				break;
+			case WEAPONTYPE:
+				insertStmt = db.compileStatement(FilteredListDao.getBulkInsertString("weapontype"));
+				for (final ContentValues value : values) {
+					FilteredListDao.bindValuesInBulkInsert(insertStmt, value);
+					insertStmt.execute();
+					insertStmt.clearBindings();
+				}
+				insertStmt.close();
+				db.setTransactionSuccessful();
+				numberInserted = values.length;
+				break;
+			case DBSOURCE:
+				insertStmt = db.compileStatement(FilteredListDao.getBulkInsertString("dbsource"));
+				for (final ContentValues value : values) {
+					FilteredListDao.bindValuesInBulkInsert(insertStmt, value);
+					insertStmt.execute();
+					insertStmt.clearBindings();
+				}
+				insertStmt.close();
+				db.setTransactionSuccessful();
+				numberInserted = values.length;
+				break;				
 			case ATTACK:
 				insertStmt = db.compileStatement(AttackDao.getBulkInsertString());
 				for (final ContentValues value : values) {
@@ -335,6 +376,9 @@ public class GtdProvider extends ContentProvider {
 		case REGION:
 		case COUNTRY:
 		case ATTACKTYPE:
+		case TARGETTYPE:
+		case WEAPONTYPE:
+		case DBSOURCE:
 		case ATTACK:
 			c = db.query(TABLE_NAMES[table], projection, selection, selectionArgs, null, null, sortOrder);
 			break;
@@ -375,10 +419,13 @@ public class GtdProvider extends ContentProvider {
 		}
 
 		switch (match) {
-		case ATTACK:
 		case REGION:
 		case COUNTRY:
 		case ATTACKTYPE:
+		case TARGETTYPE:
+		case WEAPONTYPE:
+		case DBSOURCE:
+		case ATTACK:
 			result = db.update(TABLE_NAMES[table], values, selection, selectionArgs);
 			break;
 		default:

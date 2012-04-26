@@ -27,6 +27,9 @@ public class HomeActivity extends Activity implements OnClickListener {
 	private Button mButtonAttackList;
 	private Button mButtonCountryList;
 	private Button mButtonAttackTypeList;
+	private View mButtonTargetTypeList;
+	private View mButtonWeaponTypeList;
+	private View mButtonDbSourceList;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -45,6 +48,15 @@ public class HomeActivity extends Activity implements OnClickListener {
 
 		mButtonAttackTypeList = (Button) findViewById(R.id.b_attacktype_list);
 		mButtonAttackTypeList.setOnClickListener(this);
+		
+		mButtonTargetTypeList = (Button) findViewById(R.id.b_targettype_list);
+		mButtonTargetTypeList.setOnClickListener(this);
+		
+		mButtonWeaponTypeList = (Button) findViewById(R.id.b_weapontype_list);
+		mButtonWeaponTypeList.setOnClickListener(this);
+		
+		mButtonDbSourceList = (Button) findViewById(R.id.b_dbsource_list);
+		mButtonDbSourceList.setOnClickListener(this);
 
 		mButtonAttackList = (Button) findViewById(R.id.b_attack_list);
 		mButtonAttackList.setOnClickListener(this);
@@ -68,8 +80,23 @@ public class HomeActivity extends Activity implements OnClickListener {
 			intent.putExtra("filterType", "attacktype");
 			intent.putExtra("filterDefaultUri", WSConfig.WS_ATTACKTYPE_LIST_URL);
 		}
+		if (view == mButtonTargetTypeList) {
+			intent = new Intent(this, FilteredListActivity.class);
+			intent.putExtra("filterType", "targettype");
+			intent.putExtra("filterDefaultUri", WSConfig.WS_TARGETTYPE_LIST_URL);
+		}
+		if (view == mButtonWeaponTypeList) {
+			intent = new Intent(this, FilteredListActivity.class);
+			intent.putExtra("filterType", "weapontype");
+			intent.putExtra("filterDefaultUri", WSConfig.WS_WEAPONTYPE_LIST_URL);
+		}
+		if (view == mButtonDbSourceList) {
+			intent = new Intent(this, FilteredListActivity.class);
+			intent.putExtra("filterType", "dbsource");
+			intent.putExtra("filterDefaultUri", WSConfig.WS_DBSOURCE_LIST_URL);
+		}
 		if (view == mButtonAttackList) {
-			String[] tables = { "region", "country", "attacktype" };
+			String[] tables = { "region", "country", "attacktype", "targettype", "weapontype", "dbsource" };
 			String[] projection = { FilteredListDao.ID };
 			StringBuilder filters = new StringBuilder("");
 			
