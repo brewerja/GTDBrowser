@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,6 +18,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
@@ -94,8 +97,7 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 		mRequestManager = GtdRequestManager.from(this);
 		mInflater = getLayoutInflater();
 		mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
-		mQueryHandler.startQuery(AttackDao.CONTENT_URI, AttackDao.CONTENT_PROJECTION2,
-				AttackDao.ID_ORDER_BY);
+		mQueryHandler.startQuery(AttackDao.CONTENT_URI, AttackDao.CONTENT_PROJECTION2, AttackDao.ID_ORDER_BY);
 
 	}
 
@@ -153,6 +155,16 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 
 		listView = getListView();
 		listView.setOnScrollListener(this);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+				Cursor c = (Cursor) parent.getItemAtPosition(position);
+				String gtd_id = c.getString(AttackDao.CONTENT_GTDID_COLUMN);
+				Log.i("ID", gtd_id);
+				Intent intent = new Intent(getBaseContext(), AttackDetailActivity.class);
+				intent.putExtra("id", gtd_id);
+				startActivity(intent);
+			}
+		});
 	}
 
 	@Override
@@ -319,4 +331,5 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 	}
+
 }
