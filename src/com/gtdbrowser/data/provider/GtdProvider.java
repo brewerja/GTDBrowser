@@ -51,20 +51,21 @@ public class GtdProvider extends ContentProvider {
 
 	private static final int ATTACKTYPE_BASE = 0x3000;
 	private static final int ATTACKTYPE = ATTACKTYPE_BASE;
-	
+
 	private static final int TARGETTYPE_BASE = 0x4000;
 	private static final int TARGETTYPE = TARGETTYPE_BASE;
-	
+
 	private static final int WEAPONTYPE_BASE = 0x5000;
 	private static final int WEAPONTYPE = WEAPONTYPE_BASE;
-	
+
 	private static final int DBSOURCE_BASE = 0x6000;
 	private static final int DBSOURCE = DBSOURCE_BASE;
 
 	private static final int BASE_SHIFT = 12; // DO NOT TOUCH !
 	// 12 bits to the base type: 0, 0x1000, 0x2000, etc.
 
-	private static final String[] TABLE_NAMES = { AttackDao.TABLE_NAME, "region", "country", "attacktype", "targettype", "weapontype", "dbsource" };
+	private static final String[] TABLE_NAMES = { AttackDao.TABLE_NAME, "region", "country", "attacktype",
+			"targettype", "weapontype", "dbsource" };
 
 	private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -323,7 +324,7 @@ public class GtdProvider extends ContentProvider {
 				insertStmt.close();
 				db.setTransactionSuccessful();
 				numberInserted = values.length;
-				break;				
+				break;
 			case ATTACK:
 				insertStmt = db.compileStatement(AttackDao.getBulkInsertString());
 				for (final ContentValues value : values) {
@@ -408,29 +409,15 @@ public class GtdProvider extends ContentProvider {
 	@Override
 	public int update(final Uri uri, final ContentValues values, final String selection, final String[] selectionArgs) {
 		final int match = sURIMatcher.match(uri);
-		final Context context = getContext();
-		// Pick the correct database for this operation
-		final SQLiteDatabase db = getDatabase(context);
 		final int table = match >> BASE_SHIFT;
-		int result;
 
 		if (LogConfig.DDP_DEBUG_LOGS_ENABLED) {
 			Log.d(LOG_TAG, "update: uri=" + uri + ", match is " + match);
 		}
 
-		switch (match) {
-		case REGION:
-		case COUNTRY:
-		case ATTACKTYPE:
-		case TARGETTYPE:
-		case WEAPONTYPE:
-		case DBSOURCE:
-		case ATTACK:
-			result = db.update(TABLE_NAMES[table], values, selection, selectionArgs);
-			break;
-		default:
-			throw new IllegalArgumentException("Unknown URI " + uri);
-		}
+		final Context context = getContext();
+		final SQLiteDatabase db = getDatabase(context);
+		int result = db.update(TABLE_NAMES[table], values, selection, selectionArgs);
 
 		getContext().getContentResolver().notifyChange(uri, null);
 		return result;

@@ -11,6 +11,7 @@ package com.gtdbrowser.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +40,46 @@ public class HomeActivity extends Activity implements OnClickListener {
 		bindViews();
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		String[] tables = { "region", "country", "attacktype", "targettype", "weapontype", "dbsource" };
+		String[] projection = { FilteredListDao.ID };
+
+		for (String table : tables) {
+			Cursor c = getContentResolver().query(Uri.parse(FilteredListDao.CONTENT_URI + "/" + table), projection,
+					"checked = 1", null, FilteredListDao.ID);
+			if (c == null) {
+				Log.i("COUNT", "NULL CURSOR");
+			} else if (c.getCount() < 1) {
+				if (getButton(table) != null)
+					getButton(table).setTextColor(Color.BLACK);
+			} else {
+				if (getButton(table) != null)
+					getButton(table).setTextColor(Color.BLUE);
+			}
+		}
+
+	}
+
+	private Button getButton(String name) {
+		if (name == "region") {
+			return (Button) findViewById(R.id.b_region_list);
+		} else if (name == "country") {
+			return (Button) findViewById(R.id.b_country_list);
+		} else if (name == "attacktype") {
+			return (Button) findViewById(R.id.b_attacktype_list);
+		} else if (name == "targettype") {
+			return (Button) findViewById(R.id.b_targettype_list);
+		} else if (name == "weapontype") {
+			return (Button) findViewById(R.id.b_weapontype_list);
+		} else if (name == "dbsource") {
+			return (Button) findViewById(R.id.b_dbsource_list);
+		}
+		return null;
+	}
+
 	private void bindViews() {
 		mButtonRegionList = (Button) findViewById(R.id.b_region_list);
 		mButtonRegionList.setOnClickListener(this);
@@ -48,13 +89,13 @@ public class HomeActivity extends Activity implements OnClickListener {
 
 		mButtonAttackTypeList = (Button) findViewById(R.id.b_attacktype_list);
 		mButtonAttackTypeList.setOnClickListener(this);
-		
+
 		mButtonTargetTypeList = (Button) findViewById(R.id.b_targettype_list);
 		mButtonTargetTypeList.setOnClickListener(this);
-		
+
 		mButtonWeaponTypeList = (Button) findViewById(R.id.b_weapontype_list);
 		mButtonWeaponTypeList.setOnClickListener(this);
-		
+
 		mButtonDbSourceList = (Button) findViewById(R.id.b_dbsource_list);
 		mButtonDbSourceList.setOnClickListener(this);
 
@@ -99,10 +140,10 @@ public class HomeActivity extends Activity implements OnClickListener {
 			String[] tables = { "region", "country", "attacktype", "targettype", "weapontype", "dbsource" };
 			String[] projection = { FilteredListDao.ID };
 			StringBuilder filters = new StringBuilder("");
-			
+
 			for (String table : tables) {
-				Cursor c = getContentResolver().query(Uri.parse(FilteredListDao.CONTENT_URI + "/" + table),
-						projection, "checked = 1", null, FilteredListDao.ID);
+				Cursor c = getContentResolver().query(Uri.parse(FilteredListDao.CONTENT_URI + "/" + table), projection,
+						"checked = 1", null, FilteredListDao.ID);
 				if (c == null) {
 					Log.i("COUNT", "NULL CURSOR");
 				} else if (c.getCount() < 1) {
