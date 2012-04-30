@@ -19,6 +19,7 @@
     <string name="home_b_attacktype_list">Filter by Attack Type</string>
     <string name="home_b_targettype_list">Filter by Target Type</string>
     <string name="home_b_weapontype_list">Filter by Weapon Type</string>
+    <string name="home_b_year_list">Filter by Year</string>
     <string name="home_b_dbsource_list">Filter by Database Source</string>    
     <string name="home_b_attack_list">Browse Query Results</string>
     

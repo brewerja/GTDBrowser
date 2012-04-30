@@ -9,7 +9,7 @@
 package com.gtdbrowser.config;
 
 public class WSConfig {
-	public static final int INCREMENT = 40;
+	public static final int INCREMENT = 50;
 	public static final String SERVER_URI = "http://23.21.214.235";
 	public static final String API_PATH = "/api/v1";
 
@@ -25,5 +25,7 @@ public class WSConfig {
 			+ "/weapontypes/?order_by=-num_attacks&limit=" + INCREMENT;
 	public static final String WS_DBSOURCE_LIST_URL = SERVER_URI + API_PATH
 			+ "/dbsources/?order_by=-num_attacks&limit=" + INCREMENT;
+	public static final String WS_YEAR_LIST_URL = SERVER_URI + API_PATH
+			+ "/years/?order_by=name&limit=" + INCREMENT;
 	public static final String WS_ATTACK_LIST_URL = SERVER_URI + API_PATH + "/attacks/?order_by=-id&limit=" + INCREMENT;
 }

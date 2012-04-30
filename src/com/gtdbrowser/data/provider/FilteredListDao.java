@@ -26,6 +26,7 @@ public class FilteredListDao extends GtdContent implements BaseColumns {
 
 	public static final String MIN_ID_SELECTION = ID + " >= ?";
 	public static final String NUM_ATTACKS_ORDER_BY = NUM_ATTACKS + " DESC";
+	public static final String NAME_ORDER_BY = NAME + " DESC";
 
 	public static final int CONTENT_ID_COLUMN = 0;
 	public static final int CONTENT_NAME_COLUMN = 1;
@@ -93,6 +94,7 @@ public class FilteredListDao extends GtdContent implements BaseColumns {
 		map.put("attacktypes", "attacktype");
 		map.put("targettypes", "targettype");
 		map.put("weapontypes", "weapontype");
+		map.put("years", "year");
 		map.put("dbsources", "dbsource");
 	}
 

@@ -57,15 +57,18 @@ public class GtdProvider extends ContentProvider {
 
 	private static final int WEAPONTYPE_BASE = 0x5000;
 	private static final int WEAPONTYPE = WEAPONTYPE_BASE;
+	
+	private static final int YEAR_BASE = 0x6000;
+	private static final int YEAR = YEAR_BASE;
 
-	private static final int DBSOURCE_BASE = 0x6000;
+	private static final int DBSOURCE_BASE = 0x7000;
 	private static final int DBSOURCE = DBSOURCE_BASE;
 
 	private static final int BASE_SHIFT = 12; // DO NOT TOUCH !
 	// 12 bits to the base type: 0, 0x1000, 0x2000, etc.
 
 	private static final String[] TABLE_NAMES = { AttackDao.TABLE_NAME, "region", "country", "attacktype",
-			"targettype", "weapontype", "dbsource" };
+			"targettype", "weapontype", "year", "dbsource" };
 
 	private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -82,6 +85,8 @@ public class GtdProvider extends ContentProvider {
 		matcher.addURI(AUTHORITY, "targettype", TARGETTYPE);
 		// All weapon types
 		matcher.addURI(AUTHORITY, "weapontype", WEAPONTYPE);
+		// All years
+		matcher.addURI(AUTHORITY, "year", YEAR);
 		// All database sources
 		matcher.addURI(AUTHORITY, "dbsource", DBSOURCE);
 		// All attacks
@@ -128,6 +133,7 @@ public class GtdProvider extends ContentProvider {
 			FilteredListDao.createTable(db, "attacktype");
 			FilteredListDao.createTable(db, "targettype");
 			FilteredListDao.createTable(db, "weapontype");
+			FilteredListDao.createTable(db, "year");
 			FilteredListDao.createTable(db, "dbsource");
 			AttackDao.createTable(db);
 		}
@@ -168,6 +174,7 @@ public class GtdProvider extends ContentProvider {
 		case ATTACKTYPE:
 		case TARGETTYPE:
 		case WEAPONTYPE:
+		case YEAR:
 		case DBSOURCE:
 		case ATTACK:
 			result = db.delete(TABLE_NAMES[table], selection, selectionArgs);
@@ -189,6 +196,7 @@ public class GtdProvider extends ContentProvider {
 		case ATTACKTYPE:
 		case TARGETTYPE:
 		case WEAPONTYPE:
+		case YEAR:
 		case DBSOURCE:
 			return FilteredListDao.TYPE_DIR_TYPE;
 		case ATTACK_ID:
@@ -223,6 +231,7 @@ public class GtdProvider extends ContentProvider {
 		case ATTACKTYPE:
 		case TARGETTYPE:
 		case WEAPONTYPE:
+		case YEAR:
 		case DBSOURCE:
 		case ATTACK:
 			id = db.insert(TABLE_NAMES[table], "foo", values);
@@ -314,6 +323,17 @@ public class GtdProvider extends ContentProvider {
 				db.setTransactionSuccessful();
 				numberInserted = values.length;
 				break;
+			case YEAR:
+				insertStmt = db.compileStatement(FilteredListDao.getBulkInsertString("year"));
+				for (final ContentValues value : values) {
+					FilteredListDao.bindValuesInBulkInsert(insertStmt, value);
+					insertStmt.execute();
+					insertStmt.clearBindings();
+				}
+				insertStmt.close();
+				db.setTransactionSuccessful();
+				numberInserted = values.length;
+				break;
 			case DBSOURCE:
 				insertStmt = db.compileStatement(FilteredListDao.getBulkInsertString("dbsource"));
 				for (final ContentValues value : values) {
@@ -379,6 +399,7 @@ public class GtdProvider extends ContentProvider {
 		case ATTACKTYPE:
 		case TARGETTYPE:
 		case WEAPONTYPE:
+		case YEAR:
 		case DBSOURCE:
 		case ATTACK:
 			c = db.query(TABLE_NAMES[table], projection, selection, selectionArgs, null, null, sortOrder);

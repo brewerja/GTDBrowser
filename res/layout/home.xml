@@ -42,6 +42,12 @@
         android:text="@string/home_b_weapontype_list" />
 
     <Button
+        android:id="@+id/b_year_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/home_b_year_list" />
+
+    <Button
         android:id="@+id/b_dbsource_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

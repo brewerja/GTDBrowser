@@ -99,8 +99,12 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 		mRequestManager = GtdRequestManager.from(this);
 		mInflater = getLayoutInflater();
 		mQueryHandler = new NotifyingAsyncQueryHandler(getContentResolver(), this);
-		mQueryHandler.startQuery(Uri.parse(GtdContent.CONTENT_URI + "/" + filterType),
-				FilteredListDao.CONTENT_PROJECTION, FilteredListDao.NUM_ATTACKS_ORDER_BY);
+		if (filterType.equals("year"))
+			mQueryHandler.startQuery(Uri.parse(GtdContent.CONTENT_URI + "/" + filterType),
+					FilteredListDao.CONTENT_PROJECTION, FilteredListDao.NAME_ORDER_BY);
+		else
+			mQueryHandler.startQuery(Uri.parse(GtdContent.CONTENT_URI + "/" + filterType),
+					FilteredListDao.CONTENT_PROJECTION, FilteredListDao.NUM_ATTACKS_ORDER_BY);
 
 		// Handle item selections...update the checked column in the proper
 		// table.

@@ -30,6 +30,7 @@ public class HomeActivity extends Activity implements OnClickListener {
 	private Button mButtonAttackTypeList;
 	private View mButtonTargetTypeList;
 	private View mButtonWeaponTypeList;
+	private View mButtonYearList;
 	private View mButtonDbSourceList;
 
 	@Override
@@ -44,7 +45,7 @@ public class HomeActivity extends Activity implements OnClickListener {
 	protected void onResume() {
 		super.onResume();
 
-		String[] tables = { "region", "country", "attacktype", "targettype", "weapontype", "dbsource" };
+		String[] tables = { "region", "country", "attacktype", "targettype", "weapontype", "year", "dbsource" };
 		String[] projection = { FilteredListDao.ID };
 
 		for (String table : tables) {
@@ -76,6 +77,8 @@ public class HomeActivity extends Activity implements OnClickListener {
 			return (Button) findViewById(R.id.b_weapontype_list);
 		} else if (name == "dbsource") {
 			return (Button) findViewById(R.id.b_dbsource_list);
+		} else if (name == "year") {
+			return (Button) findViewById(R.id.b_year_list);
 		}
 		return null;
 	}
@@ -98,6 +101,9 @@ public class HomeActivity extends Activity implements OnClickListener {
 
 		mButtonDbSourceList = (Button) findViewById(R.id.b_dbsource_list);
 		mButtonDbSourceList.setOnClickListener(this);
+
+		mButtonYearList = (Button) findViewById(R.id.b_year_list);
+		mButtonYearList.setOnClickListener(this);
 
 		mButtonAttackList = (Button) findViewById(R.id.b_attack_list);
 		mButtonAttackList.setOnClickListener(this);
@@ -130,6 +136,11 @@ public class HomeActivity extends Activity implements OnClickListener {
 			intent = new Intent(this, FilteredListActivity.class);
 			intent.putExtra("filterType", "weapontype");
 			intent.putExtra("filterDefaultUri", WSConfig.WS_WEAPONTYPE_LIST_URL);
+		}
+		if (view == mButtonYearList) {
+			intent = new Intent(this, FilteredListActivity.class);
+			intent.putExtra("filterType", "year");
+			intent.putExtra("filterDefaultUri", WSConfig.WS_YEAR_LIST_URL);
 		}
 		if (view == mButtonDbSourceList) {
 			intent = new Intent(this, FilteredListActivity.class);
