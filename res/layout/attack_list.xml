@@ -13,13 +13,12 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal">
-		<Spinner
-			android:id="@+id/sp_return_format"
+		<TextView
+			android:id="@+id/tv_num_attacks"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:prompt="@string/filtered_list_sp_filter_prompt"
-			android:entries="@array/return_format" />
+			android:textAppearance="?android:attr/textAppearanceLarge"/>
 		<Button
 			android:id="@+id/b_load"
 			android:layout_width="wrap_content"

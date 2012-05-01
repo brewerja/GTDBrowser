@@ -25,6 +25,7 @@ import com.gtdbrowser.data.provider.GtdContent.AttackDao;
 public class AttackListWorker {
 
 	private static String next_uri;
+	private static Integer total_count = 0;
 
 	public static Bundle start(final Context context, final String uri) throws IllegalStateException, IOException,
 			URISyntaxException, RestClientException, ParserConfigurationException, SAXException, JSONException {
@@ -47,6 +48,7 @@ public class AttackListWorker {
 
 		Bundle returnBundle = new Bundle();
 		returnBundle.putString("nextURI", next_uri);
+		returnBundle.putInt("total_count", total_count);
 		return returnBundle;
 	}
 
@@ -60,6 +62,8 @@ public class AttackListWorker {
 			next_uri = WSConfig.SERVER_URI + jsonMetaArray.getString("next");
 		else
 			next_uri = null;
+		if (jsonMetaArray.get("total_count") != JSONObject.NULL)
+			total_count = jsonMetaArray.getInt("total_count");
 
 		final JSONArray jsonAttackArray = parser.getJSONArray("objects");
 		final int size = jsonAttackArray.length();
@@ -121,6 +125,8 @@ public class AttackListWorker {
 				attack.date = jsonAttack.getString("date");
 			if (!jsonAttack.isNull("dbsource"))
 				attack.dbsource = jsonAttack.getString("dbsource");
+			if (!jsonAttack.isNull("day"))
+				attack.day = jsonAttack.getInt("day");
 			if (!jsonAttack.isNull("divert"))
 				attack.divert = jsonAttack.getString("divert");
 			if (!jsonAttack.isNull("doubtterr"))
@@ -155,6 +161,8 @@ public class AttackListWorker {
 				attack.kidhijcountry = jsonAttack.getString("kidhijcountry");
 			if (!jsonAttack.isNull("location"))
 				attack.location = jsonAttack.getString("location");
+			if (!jsonAttack.isNull("month"))
+				attack.month = jsonAttack.getInt("month");
 			if (!jsonAttack.isNull("motive"))
 				attack.motive = jsonAttack.getString("motive");
 			if (!jsonAttack.isNull("multiple"))
@@ -257,7 +265,8 @@ public class AttackListWorker {
 				attack.weaptype3 = jsonAttack.getString("weaptype3");
 			if (!jsonAttack.isNull("weaptype4"))
 				attack.weaptype4 = jsonAttack.getString("weaptype4");
-
+			if (!jsonAttack.isNull("year"))
+				attack.year = jsonAttack.getInt("year");
 			attackList.add(attack);
 		}
 

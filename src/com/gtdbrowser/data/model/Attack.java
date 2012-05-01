@@ -31,6 +31,7 @@ public class Attack {
 	public String dbsource;
 	public String divert;
 	public Boolean doubtterr;
+	public Integer day;
 	public Boolean extended;
 	// geog: [
 	// 69.9202,
@@ -56,6 +57,7 @@ public class Attack {
 	// lat: 33.3344,
 	public String location;
 	// lon: 69.9202,
+	public Integer month;
 	public String motive;
 	public String natlty1;
 	public String natlty2;
@@ -110,4 +112,5 @@ public class Attack {
 	public String weaptype2;
 	public String weaptype3;
 	public String weaptype4;
+	public Integer year;
 }

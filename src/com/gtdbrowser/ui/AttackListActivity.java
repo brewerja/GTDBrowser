@@ -23,7 +23,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.gtdbrowser.R;
@@ -46,16 +45,16 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 	private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
 	private static final String SAVED_STATE_URI = "savedStateUri";
 
-	@SuppressWarnings("unused")
-	private Spinner mFilterSpinner;
 	private Button mButtonLoad;
 	private Button mButtonClearDb;
 	private ListView listView;
+	private TextView mTextViewNumAttacks;
 
 	private GtdRequestManager mRequestManager;
 	private int mRequestId = -1;
 	private int priorFirst = -1;
 	private String ws_uri;
+	private int total_count = 0;
 
 	private NotifyingAsyncQueryHandler mQueryHandler;
 
@@ -80,6 +79,9 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 		// Retrieve the current web service URI for this filter type.
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		ws_uri = settings.getString(filter + "_uri", filterDefaultUri);
+		total_count = settings.getInt("total_count", 0);
+		// TODO: prefs fails to get updated if activity not in foreground when
+		// call completes.
 
 		setContentView(R.layout.attack_list);
 		bindViews();
@@ -145,7 +147,6 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 	}
 
 	private void bindViews() {
-		mFilterSpinner = (Spinner) findViewById(R.id.sp_filter);
 
 		mButtonLoad = (Button) findViewById(R.id.b_load);
 		mButtonLoad.setOnClickListener(this);
@@ -165,6 +166,9 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 				startActivity(intent);
 			}
 		});
+
+		mTextViewNumAttacks = (TextView) findViewById(R.id.tv_num_attacks);
+		mTextViewNumAttacks.setText(total_count + " attacks");
 	}
 
 	@Override
@@ -223,11 +227,14 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 		} else if (view == mButtonClearDb) {
 			priorFirst = -1;
 			ws_uri = filterDefaultUri;
+			total_count = 0;
 			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putString(filter + "_uri", ws_uri);
+			editor.putInt("total_count", total_count);
 			editor.commit();
 			mQueryHandler.startDelete(AttackDao.CONTENT_URI);
+			mTextViewNumAttacks.setText("0 attacks");
 			listView.clearChoices();
 		}
 	}
@@ -252,16 +259,9 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 					showDialog(DialogConfig.DIALOG_CONNEXION_ERROR);
 				}
 			}
-			// Update the web service URI if there are more pages, otherwise
-			// call it the end of pagination on this filter type.
-			if (payload.getString("nextURI") != null)
-				ws_uri = payload.getString("nextURI");
-			else
-				ws_uri = END_PAGINATION;
+
 			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-			SharedPreferences.Editor editor = settings.edit();
-			editor.putString(filter + "_uri", ws_uri);
-			editor.commit();
+			mTextViewNumAttacks.setText(settings.getInt("total_count", 0) + " attacks");
 
 			// Nothing else to do if it works as the cursor is automatically
 			// updated

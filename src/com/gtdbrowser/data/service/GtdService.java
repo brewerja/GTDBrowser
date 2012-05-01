@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -35,6 +36,8 @@ import com.gtdbrowser.worker.FilteredListWorker;
  */
 public class GtdService extends WorkerService {
 
+	public static final String PREFS_NAME = "AttackListActivityPrefs";
+	public static final String END_PAGINATION = "end";
 	private static final String LOG_TAG = GtdService.class.getSimpleName();
 
 	// Max number of parallel threads used
@@ -55,7 +58,7 @@ public class GtdService extends WorkerService {
 		final int workerType = intent.getIntExtra(INTENT_EXTRA_WORKER_TYPE, -1);
 		String uri;
 		Bundle resultBundle;
-		
+
 		try {
 			switch (workerType) {
 			case WORKER_TYPE_FILTERED_LIST:
@@ -66,6 +69,22 @@ public class GtdService extends WorkerService {
 			case WORKER_TYPE_ATTACK_LIST:
 				uri = intent.getStringExtra(INTENT_EXTRA_URI);
 				resultBundle = AttackListWorker.start(this, uri);
+
+				// Update the web service URI if there are more pages, otherwise
+				// call it the end of pagination on this filter type.
+				String ws_uri;
+				if (resultBundle.getString("nextURI") != null)
+					ws_uri = resultBundle.getString("nextURI");
+				else
+					ws_uri = END_PAGINATION;
+				int total_count = resultBundle.getInt("total_count");
+
+				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putString("attacks" + "_uri", ws_uri);
+				editor.putInt("total_count", total_count);
+				editor.commit();
+
 				sendSuccess(intent, resultBundle);
 				break;
 			}

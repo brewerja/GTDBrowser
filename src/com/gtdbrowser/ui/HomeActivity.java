@@ -32,6 +32,7 @@ public class HomeActivity extends Activity implements OnClickListener {
 	private View mButtonWeaponTypeList;
 	private View mButtonYearList;
 	private View mButtonDbSourceList;
+	private String[] tables = { "region", "country", "attacktype", "targettype", "weapontype", "year", "dbsource" };
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -45,7 +46,6 @@ public class HomeActivity extends Activity implements OnClickListener {
 	protected void onResume() {
 		super.onResume();
 
-		String[] tables = { "region", "country", "attacktype", "targettype", "weapontype", "year", "dbsource" };
 		String[] projection = { FilteredListDao.ID };
 
 		for (String table : tables) {
@@ -148,7 +148,6 @@ public class HomeActivity extends Activity implements OnClickListener {
 			intent.putExtra("filterDefaultUri", WSConfig.WS_DBSOURCE_LIST_URL);
 		}
 		if (view == mButtonAttackList) {
-			String[] tables = { "region", "country", "attacktype", "targettype", "weapontype", "dbsource" };
 			String[] projection = { FilteredListDao.ID };
 			StringBuilder filters = new StringBuilder("");
 
@@ -160,6 +159,7 @@ public class HomeActivity extends Activity implements OnClickListener {
 				} else if (c.getCount() < 1) {
 					Log.i("COUNT", new Integer(c.getCount()).toString());
 				} else {
+					// TODO: Need special handling for attacktype, weapontype, etc.
 					while (c.moveToNext()) {
 						String id = new Integer(c.getInt(0)).toString();
 						filters.append("&" + table + "=" + id);
