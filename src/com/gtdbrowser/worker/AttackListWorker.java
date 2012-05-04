@@ -33,16 +33,15 @@ public class AttackListWorker {
 		NetworkConnectionResult wsResult = NetworkConnection.retrieveResponseFromService(uri,
 				NetworkConnection.METHOD_GET);
 
-		ArrayList<Attack> AttackList = null;
-		AttackList = parseResult(wsResult.wsResponse);
+		ArrayList<Attack> attackList = null;
+		attackList = parseResult(wsResult.wsResponse);
 
 		// Adds the Attacks in the database
-		final int AttackListSize = AttackList.size();
-		if (AttackList != null && AttackListSize > 0) {
+		final int AttackListSize = attackList.size();
+		if (attackList != null && AttackListSize > 0) {
 			ContentValues[] valuesArray = new ContentValues[AttackListSize];
-			for (int i = 0; i < AttackListSize; i++) {
-				valuesArray[i] = AttackDao.getContentValues(AttackList.get(i));
-			}
+			for (int i = 0; i < AttackListSize; i++)
+				valuesArray[i] = AttackDao.getContentValues(attackList.get(i));
 			context.getContentResolver().bulkInsert(AttackDao.CONTENT_URI, valuesArray);
 		}
 
@@ -165,6 +164,12 @@ public class AttackListWorker {
 				attack.month = jsonAttack.getInt("month");
 			if (!jsonAttack.isNull("motive"))
 				attack.motive = jsonAttack.getString("motive");
+			if (!jsonAttack.isNull("natlty1"))
+				attack.natlty1 = jsonAttack.getString("natlty1");
+			if (!jsonAttack.isNull("natlty2"))
+				attack.natlty2 = jsonAttack.getString("natlty2");
+			if (!jsonAttack.isNull("natlty3"))
+				attack.natlty3 = jsonAttack.getString("natlty3");
 			if (!jsonAttack.isNull("multiple"))
 				attack.multiple = jsonAttack.getBoolean("multiple");
 			if (!jsonAttack.isNull("ndays"))

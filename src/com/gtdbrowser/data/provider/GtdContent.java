@@ -157,97 +157,97 @@ public abstract class GtdContent {
 		public static final int CONTENT_CITY_COLUMN = 12;
 		public static final int CONTENT_VICINITY_COLUMN = 13;
 		public static final int CONTENT_LOCATION_COLUMN = 14;
-		public static final int CONTENT_LAT_COLUMN = 15;
-		public static final int CONTENT_LON_COLUMN = 16;
-		public static final int CONTENT_SUMMARY_COLUMN = 17;
-		public static final int CONTENT_CRIT1_COLUMN = 18;
-		public static final int CONTENT_CRIT2_COLUMN = 19;
-		public static final int CONTENT_CRIT3_COLUMN = 20;
-		public static final int CONTENT_DOUBTTERR_COLUMN = 21;
-		public static final int CONTENT_ALTERNATIVE_COLUMN = 22;
-		public static final int CONTENT_MULTIPLE_COLUMN = 23;
-		public static final int CONTENT_CONFLICT_COLUMN = 24;
-		public static final int CONTENT_SUCCESS_COLUMN = 25;
-		public static final int CONTENT_SUICIDE_COLUMN = 26;
-		public static final int CONTENT_ATTACKTYPE1_COLUMN = 27;
-		public static final int CONTENT_ATTACKTYPE2_COLUMN = 28;
-		public static final int CONTENT_ATTACKTYPE3_COLUMN = 29;
-		public static final int CONTENT_TARGTYPE1_COLUMN = 30;
-		public static final int CONTENT_CORP1_COLUMN = 31;
-		public static final int CONTENT_TARGET1_COLUMN = 32;
-		public static final int CONTENT_NATLTY1_COLUMN = 33;
-		public static final int CONTENT_TARGTYPE2_COLUMN = 34;
-		public static final int CONTENT_CORP2_COLUMN = 35;
-		public static final int CONTENT_TARGET2_COLUMN = 36;
-		public static final int CONTENT_NATLTY2_COLUMN = 37;
-		public static final int CONTENT_TARGTYPE3_COLUMN = 38;
-		public static final int CONTENT_CORP3_COLUMN = 39;
-		public static final int CONTENT_TARGET3_COLUMN = 40;
-		public static final int CONTENT_NATLTY3_COLUMN = 41;
-		public static final int CONTENT_GNAME_COLUMN = 42;
-		public static final int CONTENT_GSUBNAME_COLUMN = 43;
-		public static final int CONTENT_GNAME2_COLUMN = 44;
-		public static final int CONTENT_GSUBNAME2_COLUMN = 45;
-		public static final int CONTENT_GNAME3_COLUMN = 46;
-		public static final int CONTENT_GSUBNAME3_COLUMN = 47;
-		public static final int CONTENT_MOTIVE_COLUMN = 48;
-		public static final int CONTENT_GUNCERTAIN1_COLUMN = 49;
-		public static final int CONTENT_GUNCERTAIN2_COLUMN = 50;
-		public static final int CONTENT_GUNCERTAIN3_COLUMN = 51;
-		public static final int CONTENT_NPERPS_COLUMN = 52;
-		public static final int CONTENT_NPERPCAP_COLUMN = 53;
-		public static final int CONTENT_CLAIMED_COLUMN = 54;
-		public static final int CONTENT_CLAIMMODE_COLUMN = 55;
-		public static final int CONTENT_CLAIMCONF_COLUMN = 56;
-		public static final int CONTENT_CLAIM2_COLUMN = 57;
-		public static final int CONTENT_CLAIMMODE2_COLUMN = 58;
-		public static final int CONTENT_CLAIMCONF2_COLUMN = 59;
-		public static final int CONTENT_CLAIM3_COLUMN = 60;
-		public static final int CONTENT_CLAIMMODE3_COLUMN = 61;
-		public static final int CONTENT_CLAIMCONF3_COLUMN = 62;
-		public static final int CONTENT_COMPCLAIM_COLUMN = 63;
-		public static final int CONTENT_WEAPTYPE1_COLUMN = 64;
-		public static final int CONTENT_WEAPSUBTYPE1_COLUMN = 65;
-		public static final int CONTENT_WEAPTYPE2_COLUMN = 66;
-		public static final int CONTENT_WEAPSUBTYPE2_COLUMN = 67;
-		public static final int CONTENT_WEAPTYPE3_COLUMN = 68;
-		public static final int CONTENT_WEAPSUBTYPE3_COLUMN = 69;
-		public static final int CONTENT_WEAPTYPE4_COLUMN = 70;
-		public static final int CONTENT_WEAPSUBTYPE4_COLUMN = 71;
-		public static final int CONTENT_WEAPDETAIL_COLUMN = 72;
-		public static final int CONTENT_NKILL_COLUMN = 73;
-		public static final int CONTENT_NKILLUS_COLUMN = 74;
-		public static final int CONTENT_NKILLTER_COLUMN = 75;
-		public static final int CONTENT_NWOUND_COLUMN = 76;
-		public static final int CONTENT_NWOUNDUS_COLUMN = 77;
-		public static final int CONTENT_NWOUNDTER_COLUMN = 78;
-		public static final int CONTENT_PROPERTY_COLUMN = 79;
-		public static final int CONTENT_PROPEXTENT_COLUMN = 80;
-		public static final int CONTENT_PROPVALUE_COLUMN = 81;
-		public static final int CONTENT_PROPCOMMENT_COLUMN = 82;
-		public static final int CONTENT_ISHOSTKID_COLUMN = 83;
-		public static final int CONTENT_NHOSTKID_COLUMN = 84;
-		public static final int CONTENT_NHOSTKIDUS_COLUMN = 85;
-		public static final int CONTENT_NHOURS_COLUMN = 86;
-		public static final int CONTENT_NDAYS_COLUMN = 87;
-		public static final int CONTENT_DIVERT_COLUMN = 88;
-		public static final int CONTENT_KIDHIJCOUNTRY_COLUMN = 89;
-		public static final int CONTENT_RANSOM_COLUMN = 90;
-		public static final int CONTENT_RANSOMAMT_COLUMN = 91;
-		public static final int CONTENT_RANSOMAMTUS_COLUMN = 92;
-		public static final int CONTENT_RANSOMPAID_COLUMN = 93;
-		public static final int CONTENT_RANSOMPAIDUS_COLUMN = 94;
-		public static final int CONTENT_RANSOMNOTE_COLUMN = 95;
-		public static final int CONTENT_HOSTKIDOUTCOME_COLUMN = 96;
-		public static final int CONTENT_NRELEASED_COLUMN = 97;
-		public static final int CONTENT_ADDNOTES_COLUMN = 98;
-		public static final int CONTENT_SCITE1_COLUMN = 99;
-		public static final int CONTENT_SCITE2_COLUMN = 100;
-		public static final int CONTENT_SCITE3_COLUMN = 101;
-		public static final int CONTENT_DBSOURCE_COLUMN = 102;
+		// public static final int CONTENT_LAT_COLUMN = 15;
+		// public static final int CONTENT_LON_COLUMN = 16;
+		public static final int CONTENT_SUMMARY_COLUMN = 15;
+		public static final int CONTENT_CRIT1_COLUMN = 16;
+		public static final int CONTENT_CRIT2_COLUMN = 17;
+		public static final int CONTENT_CRIT3_COLUMN = 18;
+		public static final int CONTENT_DOUBTTERR_COLUMN = 19;
+		public static final int CONTENT_ALTERNATIVE_COLUMN = 20;
+		public static final int CONTENT_MULTIPLE_COLUMN = 21;
+		public static final int CONTENT_CONFLICT_COLUMN = 22;
+		public static final int CONTENT_SUCCESS_COLUMN = 23;
+		public static final int CONTENT_SUICIDE_COLUMN = 24;
+		public static final int CONTENT_ATTACKTYPE1_COLUMN = 25;
+		public static final int CONTENT_ATTACKTYPE2_COLUMN = 26;
+		public static final int CONTENT_ATTACKTYPE3_COLUMN = 27;
+		public static final int CONTENT_TARGTYPE1_COLUMN = 28;
+		public static final int CONTENT_CORP1_COLUMN = 29;
+		public static final int CONTENT_TARGET1_COLUMN = 30;
+		public static final int CONTENT_NATLTY1_COLUMN = 31;
+		public static final int CONTENT_TARGTYPE2_COLUMN = 32;
+		public static final int CONTENT_CORP2_COLUMN = 33;
+		public static final int CONTENT_TARGET2_COLUMN = 34;
+		public static final int CONTENT_NATLTY2_COLUMN = 35;
+		public static final int CONTENT_TARGTYPE3_COLUMN = 36;
+		public static final int CONTENT_CORP3_COLUMN = 37;
+		public static final int CONTENT_TARGET3_COLUMN = 38;
+		public static final int CONTENT_NATLTY3_COLUMN = 39;
+		public static final int CONTENT_GNAME_COLUMN = 40;
+		public static final int CONTENT_GSUBNAME_COLUMN = 41;
+		public static final int CONTENT_GNAME2_COLUMN = 42;
+		public static final int CONTENT_GSUBNAME2_COLUMN = 43;
+		public static final int CONTENT_GNAME3_COLUMN = 44;
+		public static final int CONTENT_GSUBNAME3_COLUMN = 45;
+		public static final int CONTENT_MOTIVE_COLUMN = 46;
+		public static final int CONTENT_GUNCERTAIN1_COLUMN = 47;
+		public static final int CONTENT_GUNCERTAIN2_COLUMN = 48;
+		public static final int CONTENT_GUNCERTAIN3_COLUMN = 49;
+		public static final int CONTENT_NPERPS_COLUMN = 50;
+		public static final int CONTENT_NPERPCAP_COLUMN = 51;
+		public static final int CONTENT_CLAIMED_COLUMN = 52;
+		public static final int CONTENT_CLAIMMODE_COLUMN = 53;
+		public static final int CONTENT_CLAIMCONF_COLUMN = 54;
+		public static final int CONTENT_CLAIM2_COLUMN = 55;
+		public static final int CONTENT_CLAIMMODE2_COLUMN = 56;
+		public static final int CONTENT_CLAIMCONF2_COLUMN = 57;
+		public static final int CONTENT_CLAIM3_COLUMN = 58;
+		public static final int CONTENT_CLAIMMODE3_COLUMN = 59;
+		public static final int CONTENT_CLAIMCONF3_COLUMN = 60;
+		public static final int CONTENT_COMPCLAIM_COLUMN = 61;
+		public static final int CONTENT_WEAPTYPE1_COLUMN = 62;
+		public static final int CONTENT_WEAPSUBTYPE1_COLUMN = 63;
+		public static final int CONTENT_WEAPTYPE2_COLUMN = 64;
+		public static final int CONTENT_WEAPSUBTYPE2_COLUMN = 65;
+		public static final int CONTENT_WEAPTYPE3_COLUMN = 66;
+		public static final int CONTENT_WEAPSUBTYPE3_COLUMN = 67;
+		public static final int CONTENT_WEAPTYPE4_COLUMN = 68;
+		public static final int CONTENT_WEAPSUBTYPE4_COLUMN = 69;
+		public static final int CONTENT_WEAPDETAIL_COLUMN = 70;
+		public static final int CONTENT_NKILL_COLUMN = 71;
+		public static final int CONTENT_NKILLUS_COLUMN = 72;
+		public static final int CONTENT_NKILLTER_COLUMN = 73;
+		public static final int CONTENT_NWOUND_COLUMN = 74;
+		public static final int CONTENT_NWOUNDUS_COLUMN = 75;
+		public static final int CONTENT_NWOUNDTER_COLUMN = 76;
+		public static final int CONTENT_PROPERTY_COLUMN = 77;
+		public static final int CONTENT_PROPEXTENT_COLUMN = 78;
+		public static final int CONTENT_PROPVALUE_COLUMN = 79;
+		public static final int CONTENT_PROPCOMMENT_COLUMN = 80;
+		public static final int CONTENT_ISHOSTKID_COLUMN = 81;
+		public static final int CONTENT_NHOSTKID_COLUMN = 82;
+		public static final int CONTENT_NHOSTKIDUS_COLUMN = 83;
+		public static final int CONTENT_NHOURS_COLUMN = 84;
+		public static final int CONTENT_NDAYS_COLUMN = 85;
+		public static final int CONTENT_DIVERT_COLUMN = 86;
+		public static final int CONTENT_KIDHIJCOUNTRY_COLUMN = 87;
+		public static final int CONTENT_RANSOM_COLUMN = 88;
+		public static final int CONTENT_RANSOMAMT_COLUMN = 89;
+		public static final int CONTENT_RANSOMAMTUS_COLUMN = 90;
+		public static final int CONTENT_RANSOMPAID_COLUMN = 91;
+		public static final int CONTENT_RANSOMPAIDUS_COLUMN = 92;
+		public static final int CONTENT_RANSOMNOTE_COLUMN = 93;
+		public static final int CONTENT_HOSTKIDOUTCOME_COLUMN = 94;
+		public static final int CONTENT_NRELEASED_COLUMN = 95;
+		public static final int CONTENT_ADDNOTES_COLUMN = 96;
+		public static final int CONTENT_SCITE1_COLUMN = 97;
+		public static final int CONTENT_SCITE2_COLUMN = 98;
+		public static final int CONTENT_SCITE3_COLUMN = 99;
+		public static final int CONTENT_DBSOURCE_COLUMN = 100;
 		public static final String[] CONTENT_PROJECTION = new String[] { _ID, ID, YEAR, MONTH, DAY, DATE, APPROXDATE,
-				EXTENDED, RESOLUTION, COUNTRY, REGION, PROVSTATE, CITY, VICINITY, LOCATION, LAT, LON, SUMMARY, CRIT1,
-				CRIT2, CRIT3, DOUBTTERR, ALTERNATIVE, MULTIPLE, CONFLICT, SUCCESS, SUICIDE, ATTACKTYPE1, ATTACKTYPE2,
+				EXTENDED, RESOLUTION, COUNTRY, REGION, PROVSTATE, CITY, VICINITY, LOCATION, SUMMARY, CRIT1, CRIT2,
+				CRIT3, DOUBTTERR, ALTERNATIVE, MULTIPLE, CONFLICT, SUCCESS, SUICIDE, ATTACKTYPE1, ATTACKTYPE2,
 				ATTACKTYPE3, TARGTYPE1, CORP1, TARGET1, NATLTY1, TARGTYPE2, CORP2, TARGET2, NATLTY2, TARGTYPE3, CORP3,
 				TARGET3, NATLTY3, GNAME, GSUBNAME, GNAME2, GSUBNAME2, GNAME3, GSUBNAME3, MOTIVE, GUNCERTAIN1,
 				GUNCERTAIN2, GUNCERTAIN3, NPERPS, NPERPCAP, CLAIMED, CLAIMMODE, CLAIMCONF, CLAIM2, CLAIMMODE2,
@@ -256,31 +256,31 @@ public abstract class GtdContent {
 				NWOUND, NWOUNDUS, NWOUNDTER, PROPERTY, PROPEXTENT, PROPVALUE, PROPCOMMENT, ISHOSTKID, NHOSTKID,
 				NHOSTKIDUS, NHOURS, NDAYS, DIVERT, KIDHIJCOUNTRY, RANSOM, RANSOMAMT, RANSOMAMTUS, RANSOMPAID,
 				RANSOMPAIDUS, RANSOMNOTE, HOSTKIDOUTCOME, NRELEASED, ADDNOTES, SCITE1, SCITE2, SCITE3, DBSOURCE };
-		public static final String[] CONTENT_PROJECTION2 = new String[] { _ID, ID, YEAR, MONTH, DAY, DATE, APPROXDATE, EXTENDED,
-				RESOLUTION, COUNTRY, REGION, PROVSTATE, CITY, VICINITY, LOCATION, LAT, LON, SUMMARY, CRIT1, CRIT2,
-				CRIT3 };
+		public static final String[] CONTENT_PROJECTION2 = new String[] { _ID, ID, YEAR, MONTH, DAY, DATE, APPROXDATE,
+				EXTENDED, RESOLUTION, COUNTRY, REGION, PROVSTATE, CITY, VICINITY, LOCATION, LAT, LON, SUMMARY, CRIT1,
+				CRIT2, CRIT3 };
 
 		static void createTable(final SQLiteDatabase db) {
 			final String s = " (" + _ID + " integer primary key autoincrement, " + ID + " text, " + YEAR + " integer, "
 					+ MONTH + " integer, " + DAY + " integer, " + DATE + " text, " + APPROXDATE + " text, " + EXTENDED
 					+ " text, " + RESOLUTION + " text, " + COUNTRY + " text, " + REGION + " text, " + PROVSTATE
-					+ " text, " + CITY + " text, " + VICINITY + " text, " + LOCATION + " text, " + LAT + " text, "
-					+ LON + " text, " + SUMMARY + " text, " + CRIT1 + " text, " + CRIT2 + " text, " + CRIT3 + " text, "
-					+ DOUBTTERR + " text, " + ALTERNATIVE + " text, " + MULTIPLE + " text, " + CONFLICT + " text, "
-					+ SUCCESS + " text, " + SUICIDE + " text, " + ATTACKTYPE1 + " text, " + ATTACKTYPE2 + " text, "
-					+ ATTACKTYPE3 + " text, " + TARGTYPE1 + " text, " + CORP1 + " text, " + TARGET1 + " text, "
-					+ NATLTY1 + " text, " + TARGTYPE2 + " text, " + CORP2 + " text, " + TARGET2 + " text, " + NATLTY2
-					+ " text, " + TARGTYPE3 + " text, " + CORP3 + " text, " + TARGET3 + " text, " + NATLTY3 + " text, "
-					+ GNAME + " text, " + GSUBNAME + " text, " + GNAME2 + " text, " + GSUBNAME2 + " text, " + GNAME3
-					+ " text, " + GSUBNAME3 + " text, " + MOTIVE + " text, " + GUNCERTAIN1 + " text, " + GUNCERTAIN2
-					+ " text, " + GUNCERTAIN3 + " text, " + NPERPS + " integer, " + NPERPCAP + " integer, " + CLAIMED
-					+ " text, " + CLAIMMODE + " text, " + CLAIMCONF + " text, " + CLAIM2 + " text, " + CLAIMMODE2
-					+ " text, " + CLAIMCONF2 + " text, " + CLAIM3 + " text, " + CLAIMMODE3 + " text, " + CLAIMCONF3
-					+ " text, " + COMPCLAIM + " text, " + WEAPTYPE1 + " text, " + WEAPSUBTYPE1 + " text, " + WEAPTYPE2
-					+ " text, " + WEAPSUBTYPE2 + " text, " + WEAPTYPE3 + " text, " + WEAPSUBTYPE3 + " text, "
-					+ WEAPTYPE4 + " text, " + WEAPSUBTYPE4 + " text, " + WEAPDETAIL + " text, " + NKILL + " double, "
-					+ NKILLUS + " double, " + NKILLTER + " double, " + NWOUND + " double, " + NWOUNDUS + " double, "
-					+ NWOUNDTER + " double, " + PROPERTY + " text, " + PROPEXTENT + " text, " + PROPVALUE + " double, "
+					+ " text, " + CITY + " text, " + VICINITY + " text, " + LOCATION + " text, " + SUMMARY + " text, "
+					+ CRIT1 + " text, " + CRIT2 + " text, " + CRIT3 + " text, " + DOUBTTERR + " text, " + ALTERNATIVE
+					+ " text, " + MULTIPLE + " text, " + CONFLICT + " text, " + SUCCESS + " text, " + SUICIDE
+					+ " text, " + ATTACKTYPE1 + " text, " + ATTACKTYPE2 + " text, " + ATTACKTYPE3 + " text, "
+					+ TARGTYPE1 + " text, " + CORP1 + " text, " + TARGET1 + " text, " + NATLTY1 + " text, " + TARGTYPE2
+					+ " text, " + CORP2 + " text, " + TARGET2 + " text, " + NATLTY2 + " text, " + TARGTYPE3 + " text, "
+					+ CORP3 + " text, " + TARGET3 + " text, " + NATLTY3 + " text, " + GNAME + " text, " + GSUBNAME
+					+ " text, " + GNAME2 + " text, " + GSUBNAME2 + " text, " + GNAME3 + " text, " + GSUBNAME3
+					+ " text, " + MOTIVE + " text, " + GUNCERTAIN1 + " text, " + GUNCERTAIN2 + " text, " + GUNCERTAIN3
+					+ " text, " + NPERPS + " integer, " + NPERPCAP + " integer, " + CLAIMED + " text, " + CLAIMMODE
+					+ " text, " + CLAIMCONF + " text, " + CLAIM2 + " text, " + CLAIMMODE2 + " text, " + CLAIMCONF2
+					+ " text, " + CLAIM3 + " text, " + CLAIMMODE3 + " text, " + CLAIMCONF3 + " text, " + COMPCLAIM
+					+ " text, " + WEAPTYPE1 + " text, " + WEAPSUBTYPE1 + " text, " + WEAPTYPE2 + " text, "
+					+ WEAPSUBTYPE2 + " text, " + WEAPTYPE3 + " text, " + WEAPSUBTYPE3 + " text, " + WEAPTYPE4
+					+ " text, " + WEAPSUBTYPE4 + " text, " + WEAPDETAIL + " text, " + NKILL + " double, " + NKILLUS
+					+ " double, " + NKILLTER + " double, " + NWOUND + " double, " + NWOUNDUS + " double, " + NWOUNDTER
+					+ " double, " + PROPERTY + " text, " + PROPEXTENT + " text, " + PROPVALUE + " double, "
 					+ PROPCOMMENT + " text, " + ISHOSTKID + " text, " + NHOSTKID + " double, " + NHOSTKIDUS
 					+ " double, " + NHOURS + " double, " + NDAYS + " integer, " + DIVERT + " text, " + KIDHIJCOUNTRY
 					+ " text, " + RANSOM + " text, " + RANSOMAMT + " double, " + RANSOMAMTUS + " double, " + RANSOMPAID
@@ -332,10 +332,6 @@ public abstract class GtdContent {
 			sqlRequest.append(VICINITY);
 			sqlRequest.append(", ");
 			sqlRequest.append(LOCATION);
-			sqlRequest.append(", ");
-			sqlRequest.append(LAT);
-			sqlRequest.append(", ");
-			sqlRequest.append(LON);
 			sqlRequest.append(", ");
 			sqlRequest.append(SUMMARY);
 			sqlRequest.append(", ");
@@ -510,7 +506,7 @@ public abstract class GtdContent {
 			sqlRequest.append(DBSOURCE);
 			sqlRequest.append(" ) ");
 			sqlRequest
-					.append(" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					.append(" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			return sqlRequest.toString();
 		}
 
@@ -602,6 +598,8 @@ public abstract class GtdContent {
 			value = values.getAsString(CORP3);
 			stmt.bindString(i++, value != null ? value : "");
 			value = values.getAsString(TARGET3);
+			stmt.bindString(i++, value != null ? value : "");
+			value = values.getAsString(NATLTY3);
 			stmt.bindString(i++, value != null ? value : "");
 			value = values.getAsString(GNAME);
 			stmt.bindString(i++, value != null ? value : "");
@@ -783,6 +781,9 @@ public abstract class GtdContent {
 		public static ContentValues getContentValues(final Attack attack) {
 			ContentValues values = new ContentValues();
 			values.put(ID, attack.id);
+			values.put(YEAR, attack.year);
+			values.put(MONTH, attack.month);
+			values.put(DAY, attack.day);
 			values.put(DATE, attack.date);
 			values.put(APPROXDATE, attack.approxdate);
 			values.put(EXTENDED, attack.extended);
