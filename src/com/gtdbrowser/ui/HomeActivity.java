@@ -159,10 +159,19 @@ public class HomeActivity extends Activity implements OnClickListener {
 				} else if (c.getCount() < 1) {
 					Log.i("COUNT", new Integer(c.getCount()).toString());
 				} else {
-					// TODO: Need special handling for attacktype, weapontype, etc.
 					while (c.moveToNext()) {
 						String id = new Integer(c.getInt(0)).toString();
-						filters.append("&" + table + "=" + id);
+						if (table.equals("weapontype")) {
+							for (int i = 1; i < 5; i++)
+								filters.append("&" + "weaptype" + i + "=" + id);
+						} else if (table.equals("attacktype")) {
+							for (int i = 1; i < 4; i++)
+								filters.append("&" + table + i + "=" + id);
+						} else if (table.equals("targettype")) {
+							for (int i = 1; i < 4; i++)
+								filters.append("&" + "targtype" + i + "=" + id);
+						} else
+							filters.append("&" + table + "=" + id);
 						Log.i(table, new Integer(c.getInt(0)).toString());
 					}
 					Log.i("COUNT", new Integer(c.getCount()).toString());
