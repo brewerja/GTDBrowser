@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
+<!--
+     2011 Foxykeep (http://datadroid.foxykeep.com) Licensed under the Beerware 
 	License : As long as you retain this notice you can do whatever you want 
 	with this stuff. If we meet some day, and you think this stuff is worth it, 
-	you can buy me a beer in return -->
+	you can buy me a beer in return
+-->
 <resources>
+
     <string name="app_name">GTD Browser</string>
-    
-    <!--  Dialog texts -->
+
+    <!-- Dialog texts -->
     <string name="dialog_error_connexion_error_title">Connexion error</string>
-    <string name="dialog_error_connexion_error_message">A connexion error occured. Please verify that you are connected to an Edge, 3G or Wifi network.</string>  
+    <string name="dialog_error_connexion_error_message">A connexion error occured. Please verify that you are connected to an Edge, 3G or Wifi network.</string>
     <string name="dialog_error_data_error_title">Incorrect data</string>
     <string name="dialog_error_data_error_message">Received data are invalid.</string>
     <string name="dialog_button_retry">Retry</string>
@@ -20,18 +23,17 @@
     <string name="home_b_targettype_list">Filter by Target Type</string>
     <string name="home_b_weapontype_list">Filter by Weapon Type</string>
     <string name="home_b_year_list">Filter by Year</string>
-    <string name="home_b_dbsource_list">Filter by Database Source</string>    
+    <string name="home_b_dbsource_list">Filter by Database Source</string>
     <string name="home_b_attack_list">Browse Query Results</string>
-    
+
     <!-- FilteredListActivity texts -->
     <string name="filtered_list_title">GTD Browser > Filtered</string>
     <string name="filtered_list_sp_filter_prompt">Choose Filter</string>
     <string name="filtered_list_b_load">Load</string>
-    <string name="filtered_list_b_clear_db">Clear DB</string>
-    <string name="filtered_list_tv_empty">Press Load to Populate the View</string>
-    
+    <string name="filtered_list_b_clear_db">Clear List</string>
+    <string name="filtered_list_b_clear_selections">Clear</string>
+    <string name="filtered_list_tv_empty">Click Here to Populate the List</string>
     <string name="attack_list_title">GTD Browser > Attacks</string>
     <string name="attack_list_tv_empty">0 attacks found</string>
-    
-    <string name="attack_detail_title">GTD Browser > Attack Detail</string>
+
 </resources>

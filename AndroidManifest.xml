@@ -38,17 +38,14 @@
             android:authorities="com.gtdbrowser.data.provider.PoCProvider"
             android:exported="false" />
 
-        <activity
-            android:name=".ui.FilteredListActivity"
-            android:label="@string/filtered_list_title" >
+        <activity android:name=".ui.FilteredListActivity" >
         </activity>
         <activity
             android:name="com.gtdbrowser.ui.AttackListActivity"
             android:label="@string/attack_list_title" >
         </activity>
         <activity
-            android:name="com.gtdbrowser.ui.AttackDetailActivity"
-            android:label="@string/attack_detail_title" >
+            android:name="com.gtdbrowser.ui.AttackDetailActivity">
         </activity>
     </application>
 

@@ -14,19 +14,24 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
-        <ScrollView
+        <LinearLayout
             android:id="@+id/tab1"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="true"
-            android:paddingTop="60dp"
-            android:scrollbars="vertical" >
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:paddingTop="60dp" >
 
-            <TextView
-                android:id="@+id/txt1"
+            <ScrollView
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-        </ScrollView>
+                android:layout_height="fill_parent" >
+
+                <TextView
+                    android:id="@+id/txt1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </ScrollView>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/tab2"
@@ -34,11 +39,15 @@
             android:layout_height="fill_parent"
             android:orientation="vertical"
             android:paddingTop="60dp" >
-
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
             <TextView
                 android:id="@+id/txt2"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            </ScrollView>
         </LinearLayout>
 
         <LinearLayout
@@ -47,11 +56,15 @@
             android:layout_height="fill_parent"
             android:orientation="vertical"
             android:paddingTop="60dp" >
-
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
             <TextView
                 android:id="@+id/txt3"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            </ScrollView>
         </LinearLayout>
 
         <LinearLayout
@@ -60,11 +73,32 @@
             android:layout_height="fill_parent"
             android:orientation="vertical"
             android:paddingTop="60dp" >
-
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
             <TextView
                 android:id="@+id/txt4"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            </ScrollView>
+        </LinearLayout>
+        
+                <LinearLayout
+            android:id="@+id/tab5"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:paddingTop="60dp" >
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+            <TextView
+                android:id="@+id/txt5"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            </ScrollView>
         </LinearLayout>
     </FrameLayout>
 

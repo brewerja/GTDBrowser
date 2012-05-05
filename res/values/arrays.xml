@@ -6,7 +6,8 @@
 <resources>
 	<string-array
 		name="return_format">
-		<item>Country</item>
-		<item>Region</item>
+		<item>Most</item>
+		<item>Least</item>
+		<item>Alpha</item>
 	</string-array>
 </resources>

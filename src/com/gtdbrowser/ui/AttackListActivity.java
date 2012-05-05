@@ -277,6 +277,9 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 		} else {
 			adapter.changeCursor(cursor);
 		}
+		
+		int count = listView.getCount();
+		Log.i("COUNT", new Integer(count).toString());
 	}
 
 	class ViewHolder {

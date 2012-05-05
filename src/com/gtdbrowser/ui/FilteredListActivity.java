@@ -50,9 +50,10 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 
 	@SuppressWarnings("unused")
 	private Spinner mFilterSpinner;
-	private Button mButtonLoad;
+	private Button mButtonClear;
 	private Button mButtonClearDb;
 	private ListView listView;
+	private TextView textView;
 
 	private GtdRequestManager mRequestManager;
 	private int mRequestId = -1;
@@ -78,6 +79,8 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 		Intent intent = getIntent();
 		filterType = intent.getStringExtra("filterType");
 		filterDefaultUri = intent.getStringExtra("filterDefaultUri");
+
+		setTitle("GTD Browser > Filter by " + filterType);
 
 		// Retrieve the current web service URI for this filter type.
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -114,12 +117,16 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 				Cursor c = (Cursor) parent.getItemAtPosition(position);
 				Integer checked = c.getInt(FilteredListDao.CONTENT_CHECKED_COLUMN);
 				ContentValues values = new ContentValues();
-				if (checked == 1)
+				if (checked == 1) {
 					values.put(FilteredListDao.CHECKED, 0);
-				else
+					listView.setItemChecked(position, false);
+				} else {
 					values.put(FilteredListDao.CHECKED, 1);
+					listView.setItemChecked(position, true);
+				}
 				getContentResolver().update(Uri.parse(FilteredListDao.CONTENT_URI + "/" + filterType), values,
 						"_ID = " + id, null);
+
 			}
 		});
 	}
@@ -170,14 +177,17 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 	private void bindViews() {
 		mFilterSpinner = (Spinner) findViewById(R.id.sp_filter);
 
-		mButtonLoad = (Button) findViewById(R.id.b_load);
-		mButtonLoad.setOnClickListener(this);
+		mButtonClear = (Button) findViewById(R.id.b_clear_selections);
+		mButtonClear.setOnClickListener(this);
 
 		mButtonClearDb = (Button) findViewById(R.id.b_clear_db);
 		mButtonClearDb.setOnClickListener(this);
 
 		listView = getListView();
 		listView.setOnScrollListener(this);
+
+		textView = (TextView) getListView().getEmptyView();
+		textView.setOnClickListener(this);
 	}
 
 	@Override
@@ -231,7 +241,7 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 
 	@Override
 	public void onClick(final View view) {
-		if (view == mButtonLoad) {
+		if (view == textView) {
 			callFilteredListWS();
 		} else if (view == mButtonClearDb) {
 			priorFirst = -1;
@@ -242,6 +252,11 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 			editor.commit();
 			mQueryHandler.startDelete(Uri.parse(FilteredListDao.CONTENT_URI + "/" + filterType));
 			listView.clearChoices();
+		} else if (view == mButtonClear) {
+			listView.clearChoices();
+			ContentValues values = new ContentValues();
+			values.put(FilteredListDao.CHECKED, 0);
+			getContentResolver().update(Uri.parse(FilteredListDao.CONTENT_URI + "/" + filterType), values, null, null);
 		}
 	}
 
@@ -276,13 +291,6 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 			editor.putString(filterType + "_uri", ws_uri);
 			editor.commit();
 
-			int count = listView.getCount();
-			for (int i = 0; i < count; i++) {
-				Integer item = ((Cursor) listView.getItemAtPosition(i)).getInt(FilteredListDao.CONTENT_CHECKED_COLUMN);
-				if (item == 1)
-					listView.setItemChecked(i, true);
-
-			}
 			// Nothing else to do if it works as the cursor is automatically
 			// updated
 		}
