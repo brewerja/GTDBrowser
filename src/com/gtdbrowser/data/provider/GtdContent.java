@@ -264,23 +264,23 @@ public abstract class GtdContent {
 			final String s = " (" + _ID + " integer primary key autoincrement, " + ID + " text, " + YEAR + " integer, "
 					+ MONTH + " integer, " + DAY + " integer, " + DATE + " text, " + APPROXDATE + " text, " + EXTENDED
 					+ " text, " + RESOLUTION + " text, " + COUNTRY + " text, " + REGION + " text, " + PROVSTATE
-					+ " text, " + CITY + " text, " + VICINITY + " text, " + LOCATION + " text, " + SUMMARY + " text, "
-					+ CRIT1 + " text, " + CRIT2 + " text, " + CRIT3 + " text, " + DOUBTTERR + " text, " + ALTERNATIVE
-					+ " text, " + MULTIPLE + " text, " + CONFLICT + " text, " + SUCCESS + " text, " + SUICIDE
-					+ " text, " + ATTACKTYPE1 + " text, " + ATTACKTYPE2 + " text, " + ATTACKTYPE3 + " text, "
-					+ TARGTYPE1 + " text, " + CORP1 + " text, " + TARGET1 + " text, " + NATLTY1 + " text, " + TARGTYPE2
-					+ " text, " + CORP2 + " text, " + TARGET2 + " text, " + NATLTY2 + " text, " + TARGTYPE3 + " text, "
-					+ CORP3 + " text, " + TARGET3 + " text, " + NATLTY3 + " text, " + GNAME + " text, " + GSUBNAME
-					+ " text, " + GNAME2 + " text, " + GSUBNAME2 + " text, " + GNAME3 + " text, " + GSUBNAME3
-					+ " text, " + MOTIVE + " text, " + GUNCERTAIN1 + " text, " + GUNCERTAIN2 + " text, " + GUNCERTAIN3
-					+ " text, " + NPERPS + " integer, " + NPERPCAP + " integer, " + CLAIMED + " text, " + CLAIMMODE
-					+ " text, " + CLAIMCONF + " text, " + CLAIM2 + " text, " + CLAIMMODE2 + " text, " + CLAIMCONF2
-					+ " text, " + CLAIM3 + " text, " + CLAIMMODE3 + " text, " + CLAIMCONF3 + " text, " + COMPCLAIM
-					+ " text, " + WEAPTYPE1 + " text, " + WEAPSUBTYPE1 + " text, " + WEAPTYPE2 + " text, "
-					+ WEAPSUBTYPE2 + " text, " + WEAPTYPE3 + " text, " + WEAPSUBTYPE3 + " text, " + WEAPTYPE4
-					+ " text, " + WEAPSUBTYPE4 + " text, " + WEAPDETAIL + " text, " + NKILL + " double, " + NKILLUS
-					+ " double, " + NKILLTER + " double, " + NWOUND + " double, " + NWOUNDUS + " double, " + NWOUNDTER
-					+ " double, " + PROPERTY + " text, " + PROPEXTENT + " text, " + PROPVALUE + " double, "
+					+ " text, " + CITY + " text, " + VICINITY + " text, " + LOCATION + " text, " + LAT + " text, "
+					+ LON + " text, " + SUMMARY + " text, " + CRIT1 + " text, " + CRIT2 + " text, " + CRIT3 + " text, "
+					+ DOUBTTERR + " text, " + ALTERNATIVE + " text, " + MULTIPLE + " text, " + CONFLICT + " text, "
+					+ SUCCESS + " text, " + SUICIDE + " text, " + ATTACKTYPE1 + " text, " + ATTACKTYPE2 + " text, "
+					+ ATTACKTYPE3 + " text, " + TARGTYPE1 + " text, " + CORP1 + " text, " + TARGET1 + " text, "
+					+ NATLTY1 + " text, " + TARGTYPE2 + " text, " + CORP2 + " text, " + TARGET2 + " text, " + NATLTY2
+					+ " text, " + TARGTYPE3 + " text, " + CORP3 + " text, " + TARGET3 + " text, " + NATLTY3 + " text, "
+					+ GNAME + " text, " + GSUBNAME + " text, " + GNAME2 + " text, " + GSUBNAME2 + " text, " + GNAME3
+					+ " text, " + GSUBNAME3 + " text, " + MOTIVE + " text, " + GUNCERTAIN1 + " text, " + GUNCERTAIN2
+					+ " text, " + GUNCERTAIN3 + " text, " + NPERPS + " integer, " + NPERPCAP + " integer, " + CLAIMED
+					+ " text, " + CLAIMMODE + " text, " + CLAIMCONF + " text, " + CLAIM2 + " text, " + CLAIMMODE2
+					+ " text, " + CLAIMCONF2 + " text, " + CLAIM3 + " text, " + CLAIMMODE3 + " text, " + CLAIMCONF3
+					+ " text, " + COMPCLAIM + " text, " + WEAPTYPE1 + " text, " + WEAPSUBTYPE1 + " text, " + WEAPTYPE2
+					+ " text, " + WEAPSUBTYPE2 + " text, " + WEAPTYPE3 + " text, " + WEAPSUBTYPE3 + " text, "
+					+ WEAPTYPE4 + " text, " + WEAPSUBTYPE4 + " text, " + WEAPDETAIL + " text, " + NKILL + " double, "
+					+ NKILLUS + " double, " + NKILLTER + " double, " + NWOUND + " double, " + NWOUNDUS + " double, "
+					+ NWOUNDTER + " double, " + PROPERTY + " text, " + PROPEXTENT + " text, " + PROPVALUE + " double, "
 					+ PROPCOMMENT + " text, " + ISHOSTKID + " text, " + NHOSTKID + " double, " + NHOSTKIDUS
 					+ " double, " + NHOURS + " double, " + NDAYS + " integer, " + DIVERT + " text, " + KIDHIJCOUNTRY
 					+ " text, " + RANSOM + " text, " + RANSOMAMT + " double, " + RANSOMAMTUS + " double, " + RANSOMPAID
