@@ -29,13 +29,13 @@ public class GtdProvider extends ContentProvider {
 
 	private static final String LOG_TAG = GtdProvider.class.getSimpleName();
 
-	protected static final String DATABASE_NAME = "DataManagerPoC.db";
+	protected static final String DATABASE_NAME = "GTD.db";
 
 	// Any changes to the database format *must* include update-in-place code.
 	// Original version: 1
 	public static final int DATABASE_VERSION = 1;
 
-	public static final String AUTHORITY = "com.gtdbrowser.data.provider.PoCProvider";
+	public static final String AUTHORITY = "com.gtdbrowser.data.provider.GtdProvider";
 
 	public static final Uri INTEGRITY_CHECK_URI = Uri.parse("content://" + AUTHORITY + "/integrityCheck");
 

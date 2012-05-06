@@ -133,6 +133,7 @@ public class AttackDetailActivity extends Activity {
 		String DBSOURCE = c.getString(AttackDao.CONTENT_DBSOURCE_COLUMN);
 
 		// PULLED OUT LAT, LON
+		@SuppressWarnings("unused")
 		String fullText = "ID: " + ID + "\n" + "YEAR: " + YEAR + "\n" + "MONTH: " + MONTH + "\n" + "DAY: " + DAY + "\n"
 				+ "DATE: " + DATE + "\n" + "APPROXDATE: " + APPROXDATE + "\n" + "EXTENDED: " + EXTENDED + "\n"
 				+ "RESOLUTION: " + RESOLUTION + "\n" + "COUNTRY: " + COUNTRY + "\n" + "REGION: " + REGION + "\n"

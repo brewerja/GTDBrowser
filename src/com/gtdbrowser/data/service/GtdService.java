@@ -113,7 +113,7 @@ public class GtdService extends WorkerService {
 		// This block (which should be the last one in your implementation)
 		// will catch all the RuntimeException and send you back an error
 		// that you can manage. If you remove this catch, the
-		// RuntimeException will still crash the PoCService but you will not be
+		// RuntimeException will still crash the GtdService but you will not be
 		// informed (as it is in 'background') so you should never remove this
 		// catch
 		catch (final RuntimeException e) {
