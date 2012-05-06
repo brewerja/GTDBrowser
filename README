@@ -1,3 +1,7 @@
 Android application to browse the Global Terrorism Database.
 
+Requires the DataDroid Library:
+  git clone https://github.com/foxykeep/DataDroid.git
+  (Add the generated .jar as a library to this project.)
+
 John Brewer
