@@ -169,6 +169,7 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 
 		mTextViewNumAttacks = (TextView) findViewById(R.id.tv_num_attacks);
 		mTextViewNumAttacks.setText(total_count + " attacks");
+		mTextViewNumAttacks.setOnClickListener(this);
 	}
 
 	@Override
@@ -236,7 +237,8 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 			mQueryHandler.startDelete(AttackDao.CONTENT_URI);
 			mTextViewNumAttacks.setText("0 attacks");
 			listView.clearChoices();
-		}
+		} else if (view == mTextViewNumAttacks)
+			listView.setSelection(0);
 	}
 
 	@Override
@@ -277,7 +279,7 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 		} else {
 			adapter.changeCursor(cursor);
 		}
-		
+
 		int count = listView.getCount();
 		Log.i("COUNT", new Integer(count).toString());
 	}
@@ -286,16 +288,26 @@ public class AttackListActivity extends ListActivity implements OnRequestFinishe
 		private TextView mTextViewName;
 		private TextView mTextViewId;
 		private TextView mTextViewNumAttacks;
+		private TextView mTextViewNumKilled;
 
 		public ViewHolder(final View view) {
 			mTextViewName = (TextView) view.findViewById(R.id.tv_name);
 			mTextViewId = (TextView) view.findViewById(R.id.tv_id);
 			mTextViewNumAttacks = (TextView) view.findViewById(R.id.tv_num_attacks);
+			mTextViewNumKilled = (TextView) view.findViewById(R.id.tv_num_killed);
 		}
 
 		public void populateView(final Cursor c) {
-			mTextViewName.setText(String.valueOf(c.getString(AttackDao.CONTENT_GTDID_COLUMN)));
-			mTextViewId.setText(String.valueOf(c.getString(AttackDao.CONTENT_DATE_COLUMN)));
+			// TODO: Shouldn't use hard coded numbers here.
+			mTextViewName.setText(String.valueOf(c.getString(21)));
+			mTextViewNumKilled.setText(String.valueOf(c.getString(22)));
+
+			String id = c.getString(AttackDao.CONTENT_GTDID_COLUMN);
+			String year = id.substring(0, 4);
+			String month = id.substring(4, 6);
+			String day = id.substring(6, 8);
+			String rest = id.substring(8, id.length());
+			mTextViewId.setText(year + " " + month + " " + day + " " + rest);
 			mTextViewNumAttacks.setText(String.valueOf(c.getString(AttackDao.CONTENT_COUNTRY_COLUMN)));
 		}
 	}

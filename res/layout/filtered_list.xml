@@ -16,14 +16,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <Spinner
-            android:id="@+id/sp_filter"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:entries="@array/return_format"
-            android:prompt="@string/filtered_list_sp_filter_prompt" />
-
         <Button
             android:id="@+id/b_clear_selections"
             android:layout_width="wrap_content"
@@ -58,7 +50,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingTop="30dp"
-            android:text="@string/filtered_list_tv_empty" />
+            android:text="@string/filtered_list_tv_empty"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
     </FrameLayout>
 
 </LinearLayout>

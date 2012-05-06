@@ -258,7 +258,7 @@ public abstract class GtdContent {
 				RANSOMPAIDUS, RANSOMNOTE, HOSTKIDOUTCOME, NRELEASED, ADDNOTES, SCITE1, SCITE2, SCITE3, DBSOURCE };
 		public static final String[] CONTENT_PROJECTION2 = new String[] { _ID, ID, YEAR, MONTH, DAY, DATE, APPROXDATE,
 				EXTENDED, RESOLUTION, COUNTRY, REGION, PROVSTATE, CITY, VICINITY, LOCATION, LAT, LON, SUMMARY, CRIT1,
-				CRIT2, CRIT3 };
+				CRIT2, CRIT3, ATTACKTYPE1, NKILL };
 
 		static void createTable(final SQLiteDatabase db) {
 			final String s = " (" + _ID + " integer primary key autoincrement, " + ID + " text, " + YEAR + " integer, "

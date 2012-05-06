@@ -28,11 +28,13 @@
 
     <!-- FilteredListActivity texts -->
     <string name="filtered_list_title">GTD Browser > Filtered</string>
-    <string name="filtered_list_sp_filter_prompt">Choose Filter</string>
-    <string name="filtered_list_b_load">Load</string>
-    <string name="filtered_list_b_clear_db">Clear List</string>
-    <string name="filtered_list_b_clear_selections">Clear</string>
+    <string name="filtered_list_b_clear_db">Delete List</string>
+    <string name="filtered_list_b_clear_selections">Clear Selections</string>
     <string name="filtered_list_tv_empty">Click Here to Populate the List</string>
+
+    <!-- AttackListActivity texts -->
+    <string name="attack_list_b_load">Load</string>
+    <string name="attack_list_b_clear_db">Clear List</string>
     <string name="attack_list_title">GTD Browser > Attacks</string>
     <string name="attack_list_tv_empty">0 attacks found</string>
 

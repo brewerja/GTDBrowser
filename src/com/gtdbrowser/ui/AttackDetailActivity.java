@@ -190,6 +190,16 @@ public class AttackDetailActivity extends Activity {
 		StringBuilder tab2TextBuilder = new StringBuilder();
 		tab2TextBuilder.append("Was the attack successful? " + getYesNo(SUCCESS));
 
+		if (ISHOSTKID.equals("true"))
+			tab2TextBuilder.append("\nThere were hostages taken.");
+
+		if (!HOSTKIDOUTCOME.equals("") && !HOSTKIDOUTCOME.equals("Unknown"))
+			tab2TextBuilder
+					.append("\nThe outcome was '" + HOSTKIDOUTCOME.replace("Hostage(s) ", "").toLowerCase() + "'.");
+
+		if (SUICIDE.equals("true"))
+			tab2TextBuilder.append("\nThis was a suicide attack.");
+
 		tab2TextBuilder.append("\n\nAttack Type(s)\n");
 		if (!ATTACKTYPE1.isEmpty())
 			tab2TextBuilder.append("\t" + ATTACKTYPE1 + "\n");
@@ -274,27 +284,67 @@ public class AttackDetailActivity extends Activity {
 		// Tab 4 Text
 		StringBuilder tab4TextBuilder = new StringBuilder();
 		tab4TextBuilder.append("Perpetrators\n");
+
 		if (!GNAME.isEmpty())
 			tab4TextBuilder.append("\t" + GNAME + "\n");
 		if (!GSUBNAME.isEmpty())
 			tab4TextBuilder.append("\t\t" + GSUBNAME + "\n");
-		if (!GNAME.equals("Unknown") && !CLAIMED.isEmpty())
+		if (!GNAME.equals("Unknown") && !CLAIMED.isEmpty()) {
 			tab4TextBuilder.append("\t\tClaimed? " + getYesNo(CLAIMED) + "\n");
+			if (CLAIMED.equals("true")) {
+				if (CLAIMMODE.equals("Unknown"))
+					tab4TextBuilder.append("\t\tIt's unknown how the claim was made.");
+				else if (CLAIMMODE.equals("Other"))
+					tab4TextBuilder.append("\t\tThe claim mode was 'other'.");
+				else
+					tab4TextBuilder.append("\t\tThe claim was made by " + CLAIMMODE.toLowerCase());
+				tab4TextBuilder.append("\n");
+			}
+		}
+
 		if (!GNAME2.isEmpty())
 			tab4TextBuilder.append("\t" + GNAME2 + "\n");
 		if (!GSUBNAME2.isEmpty())
 			tab4TextBuilder.append("\t\t" + GSUBNAME2 + "\n");
-		if (!GNAME2.equals("Unknown") && !CLAIM2.isEmpty())
+		if (!GNAME2.equals("Unknown") && !CLAIM2.isEmpty()) {
 			tab4TextBuilder.append("\t\tClaimed? " + getYesNo(CLAIM2) + "\n");
+			if (CLAIMED.equals("true")) {
+				if (CLAIMMODE.equals("Unknown"))
+					tab4TextBuilder.append("\t\tIt's unknown how the claim was made.");
+				else if (CLAIMMODE.equals("Other"))
+					tab4TextBuilder.append("\t\tThe claim mode was 'other'.");
+				else
+					tab4TextBuilder.append("\t\tThe claim was made by " + CLAIMMODE.toLowerCase());
+				tab4TextBuilder.append("\n");
+			}
+		}
+
 		if (!GNAME3.isEmpty())
 			tab4TextBuilder.append("\t" + GNAME3 + "\n");
 		if (!GSUBNAME3.isEmpty())
 			tab4TextBuilder.append("\t\t" + GSUBNAME3 + "\n");
-		if (!GNAME3.equals("Unknown") && !CLAIM3.isEmpty())
+		if (!GNAME3.equals("Unknown") && !CLAIM3.isEmpty()) {
 			tab4TextBuilder.append("\t\tClaimed? " + getYesNo(CLAIM3) + "\n");
+			if (CLAIMED.equals("true")) {
+				if (CLAIMMODE.equals("Unknown"))
+					tab4TextBuilder.append("\t\tIt's unknown how the claim was made.");
+				else if (CLAIMMODE.equals("Other"))
+					tab4TextBuilder.append("\t\tThe claim mode was 'other'.");
+				else
+					tab4TextBuilder.append("\t\tThe claim was made by " + CLAIMMODE.toLowerCase());
+				tab4TextBuilder.append("\n");
+			}
+		}
+
+		if (COMPCLAIM.equals("true"))
+			tab4TextBuilder.append("There were competing claims of responsibility.");
+
 		if (!MOTIVE.isEmpty())
-			tab4TextBuilder.append("\nMotive: " + MOTIVE + "\n");
-		
+			tab4TextBuilder.append("\nMotive: " + MOTIVE + "\n\n");
+
+		tab4TextBuilder.append("Wounded: " + NWOUND + "\n");
+		tab4TextBuilder.append("Fatalities: " + NKILL + "\n");
+
 		((TextView) findViewById(R.id.txt4)).setText(tab4TextBuilder);
 
 		// Tab 5 Text

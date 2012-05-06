@@ -48,8 +48,6 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 	private static final String SAVED_STATE_ERROR_MESSAGE = "savedStateErrorMessage";
 	private static final String SAVED_STATE_URI = "savedStateUri";
 
-	@SuppressWarnings("unused")
-	private Spinner mFilterSpinner;
 	private Button mButtonClear;
 	private Button mButtonClearDb;
 	private ListView listView;
@@ -175,7 +173,6 @@ public class FilteredListActivity extends ListActivity implements OnRequestFinis
 	}
 
 	private void bindViews() {
-		mFilterSpinner = (Spinner) findViewById(R.id.sp_filter);
 
 		mButtonClear = (Button) findViewById(R.id.b_clear_selections);
 		mButtonClear.setOnClickListener(this);
